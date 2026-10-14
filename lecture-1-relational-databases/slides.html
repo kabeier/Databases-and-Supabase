@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lecture 1 · Relational Databases</title>
+<link rel="stylesheet" href="../shared/deck.css">
+</head>
+<body data-minutes="42">
+<div class="stage">
+
+<!-- ============ OPEN (0–3) ============ -->
+<section class="slide title" data-seg="Open" data-at="0">
+  <div class="kicker">Building Applications · Relational Databases · Part 1 of 2</div>
+  <h1>Relational databases: plan your data before Claude builds it</h1>
+  <p class="sub">Today you design the data on paper. Next lecture it moves into a real cloud database.</p>
+  <aside class="notes">
+    <p><b>Before class:</b> open these tabs: <code>drawsql.app/draw</code> (no account needed), the Noun Hunt page, the Relationship Sorter page. In DrawSQL, pick <b>PostgreSQL</b> and <b>Start with a blank canvas</b> so it's ready at slide 12. Press <b>T</b> to start the clock.</p>
+    <p>Keep <code>demo-kit/task-manager-erd.png</code> handy as the backup if DrawSQL misbehaves.</p>
+  </aside>
+</section>
+
+<section class="slide" data-seg="Open" data-at="1">
+  <h2>Today</h2>
+  <ul>
+    <li>What a relational database is: tables, rows, columns, SQL</li>
+    <li>Read your user stories and pull out the tables and columns</li>
+    <li>Pick the right PostgreSQL data type for each column</li>
+    <li>Connect tables with keys: one-to-one, many-to-one, many-to-many</li>
+    <li>Draw it all in DrawSQL, live</li>
+  </ul>
+  <aside class="notes">
+    <p>"Claude Code builds on the mental model you bring. If your model of the data is fuzzy, the database it builds will be fuzzy. Today we make it sharp."</p>
+  </aside>
+</section>
+
+<section class="slide statement" data-seg="Open" data-at="2">
+  <h2>Refresh last lecture's workout app. Every workout is gone.</h2>
+  <p>The browser forgets. A database remembers, for every user, on every device.</p>
+  <aside class="notes">
+    <p>If you have Liftlog open, log a workout, refresh, and show it vanish. "We told Claude to keep the data in the browser only. Real apps need somewhere that remembers. That's what the next two lectures are about."</p>
+  </aside>
+</section>
+
+<!-- ============ WHAT IS AN RDBMS (3–9) ============ -->
+<section class="slide diagram" data-seg="What is an RDBMS?" data-at="3">
+  <img src="../diagrams/DB1-01-library.png" alt="A library as a database: books, members and loans tables, with loans pointing at books and members">
+  <div class="src">diagrams/DB1-01-library.tldr</div>
+  <aside class="notes">
+    <p>The library story from the reading. Three separate collections: books, members, loans. "Without the loans log it's a pile of disconnected facts. The loan connects a member to a book on a date. That connection is the <b>relational</b> in relational database."</p>
+    <p>Point at a row (one book) and a column (title). Then: "Which books does Ana have? Find Ana's id, find her loans, look up those book ids. The database does that lookup for you when you ask in SQL."</p>
+  </aside>
+</section>
+
+<section class="slide" data-seg="What is an RDBMS?" data-at="5">
+  <h2>A table is a spreadsheet with rules</h2>
+  <div class="cols wide-left">
+    <table class="dbt small">
+      <caption>tasks</caption>
+      <tr><th class="pk">id</th><th>title</th><th>is_complete</th><th>created_at</th><th class="fk">project_id</th></tr>
+      <tr><td class="pk">1</td><td>Write intro email</td><td>false</td><td>2024-11-01 09:00</td><td class="fk">3</td></tr>
+      <tr><td class="pk">2</td><td>Review pull request</td><td>true</td><td>2024-11-01 10:30</td><td class="fk">3</td></tr>
+      <tr><td class="pk">3</td><td>Plan sprint</td><td>false</td><td>2024-11-02 08:00</td><td class="fk">7</td></tr>
+    </table>
+    <ul class="small">
+      <li>Each <b>row</b> is one record: one task</li>
+      <li>Each <b>column</b> is one fact about it</li>
+      <li><b style="background:#fff6c4">id</b> is the <b>primary key</b>: unique, never repeats</li>
+      <li><b style="background:#e3f5ec">project_id</b> points at a row in another table</li>
+      <li>Names are plural and <code>snake_case</code></li>
+    </ul>
+  </div>
+  <aside class="notes">
+    <p>The primary key is like a Social Security number: it exists only to identify this one row. Two tasks can have the same title. They can never have the same id.</p>
+    <p>"project_id is a foreign key. Park that word, we'll come back to it in 25 minutes."</p>
+  </aside>
+</section>
+
+<section class="slide" data-seg="What is an RDBMS?" data-at="7">
+  <h2>The RDBMS is the engine. SQL is how you talk to it.</h2>
+  <div class="cols">
+    <div>
+      <p>A <b>Relational Database Management System</b> stores the tables, keeps the rules, and lets many users read and write at once without breaking anything.</p>
+      <p class="small">Popular ones: <b>PostgreSQL</b>, MySQL, SQLite, SQL Server. We use PostgreSQL. It's what Supabase runs.</p>
+    </div>
+    <pre><span class="c">-- "Which tasks aren't done yet?"</span>
+SELECT title
+FROM tasks
+WHERE is_complete = false;
+
+<span class="c">-- Claude writes this for you.</span>
+<span class="c">-- You need to be able to read it.</span></pre>
+  </div>
+  <aside class="notes">
+    <p>Four takeaways from the reading: data lives in tables, tables link through relationships, the RDBMS is the software that manages it, and you talk to it in SQL.</p>
+    <p>Don't teach SQL syntax. Read the query out loud like English: "select the title from tasks where it isn't complete."</p>
+  </aside>
+</section>
+
+<!-- ============ FROM STORIES TO TABLES (9–18) ============ -->
+<section class="slide diagram" data-seg="Stories → tables" data-at="9">
+  <img src="../diagrams/DB1-02-nouns-to-tables.png" alt="User stories with the nouns in capitals; each noun becomes a table and its details become columns">
+  <div class="src">diagrams/DB1-02-nouns-to-tables.tldr</div>
+  <aside class="notes">
+    <p>"You already wrote user stories for your app. They're the start of your database too." Read the stories, point at the nouns in caps: USER, TASK, PROJECT. Each becomes a table.</p>
+    <p>Then the details: a task has a title, a due date, a done flag, a created time. Those become columns.</p>
+    <p>"No computer needed. Careful reading and clear thinking."</p>
+  </aside>
+</section>
+
+<section class="slide" data-seg="Stories → tables" data-at="11">
+  <h2>Table or column? Ask: does it have details of its own?</h2>
+  <div class="cols">
+    <div class="card blue">
+      <h3>Its own table</h3>
+      <ul>
+        <li><b>project</b>: has a name, a description, an owner</li>
+        <li><b>tag</b>: has a name, and many tasks share it</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <h3>Just a column</h3>
+      <ul>
+        <li><b>complete</b>: yes or no</li>
+        <li><b>due date</b>: one date</li>
+        <li><b>status</b>: pending, in progress, done</li>
+      </ul>
+    </div>
+  </div>
+  <p class="bottomline">If it's a single value, it's a column. If it has its own details, it's a table.</p>
+  <aside class="notes">
+    <p>This is the tip box from the reading. "Status" is the classic trap: it feels like a thing, but it's just a value.</p>
+    <p>Next is the activity, on a different app, so they practice the method instead of copying our example.</p>
+  </aside>
+</section>
+
+<section class="slide activity" data-seg="Activity: Noun Hunt" data-at="12">
+  <h2>Activity: Noun Hunt</h2>
+  <div class="countdown" data-sec="360"></div>
+  <ol class="steps">
+    <li>Open the Recipe Box stories (link in chat)</li>
+    <li>Click words to mark them: once for <b>table</b>, twice for <b>column</b></li>
+    <li>In chat, post your tables, each with its columns</li>
+    <li>Bonus: which table is hiding? (Hint: "an amount for each")</li>
+  </ol>
+  <p class="muted small" style="margin-top:24px">Page: activity-noun-hunt/</p>
+  <aside class="notes">
+    <p><b>Timing:</b> 1 min to explain, 3 min to work, 2 min debrief. Post the link in chat.</p>
+    <p><b>Debrief:</b> press <b>K</b> on the page to show the answer key. Expect: users, recipes, categories, ingredients, reviews. The hidden ones are <b>recipe_ingredients</b> (the amount belongs to the pairing of a recipe and an ingredient) and <b>favorites</b> (a user saves many recipes, a recipe is saved by many users).</p>
+    <p>Traps worth calling out: <b>photo</b> is a column (a URL), not a table. <b>vegetarian</b> is a yes/no column. <b>category</b> could be a column or a table; a table wins if you want a fixed list to browse.</p>
+    <p>Full key: the "Database Activities - Answer Keys" file in your Notes folder.</p>
+  </aside>
+</section>
+
+<section class="slide" data-seg="Data types" data-at="18">
+  <h2>Every column gets a data type</h2>
+  <div class="grid2x4">
+    <div class="card"><b>INTEGER</b><p>Whole numbers. Seats at a table: 4, never 4.7.</p></div>
+    <div class="card"><b>BIGINT</b><p>Really big whole numbers. Page views.</p></div>
+    <div class="card"><b>NUMERIC</b><p>Exact decimals. Money: $19.99, exactly.</p></div>
+    <div class="card"><b>VARCHAR(n)</b><p>Short text with a limit. Usernames, emails.</p></div>
+    <div class="card"><b>TEXT</b><p>Text with no limit. Descriptions, comments.</p></div>
+    <div class="card"><b>BOOLEAN</b><p>true or false. A light switch.</p></div>
+    <div class="card"><b>DATE / TIMESTAMPTZ</b><p>A day / an exact moment, time zone aware.</p></div>
+    <div class="card"><b>UUID</b><p>A random, globally unique id.</p></div>
+  </div>
+  <p class="bottomline" style="margin-top:32px">The right type keeps bad data out. Never store money as FLOAT.</p>
+  <aside class="notes">
+    <p>Three reasons types matter: data is stored correctly, invalid data can't sneak in, and the database can work efficiently.</p>
+    <p>FLOAT for money: 0.1 + 0.2 is 0.30000000000000004 in floating point. Fine for a game score, a real problem for a bank.</p>
+    <p><b>JSONB</b> is in the reading too: a PostgreSQL "miscellaneous drawer" for JSON. Useful sometimes; don't use it to avoid designing tables.</p>
+    <p>UUIDs look like <code>a1b2c3d4-e5f6-…</code>. We'll use them for ids. They're safe to create anywhere without two ever colliding.</p>
+  </aside>
+</section>
+
+<section class="slide ask" data-seg="Data types" data-at="21">
+  <div class="sticky">
+    <div class="who">Quick fire · answer in chat</div>
+    <div class="q">price · is_published · birthday · bio · email · last_login · seat_count</div>
+    <div class="how">I'll call one out. You type its data type.</div>
+  </div>
+  <aside class="notes">
+    <p>Answers:</p>
+    <ul>
+      <li><b>price</b>: NUMERIC(10,2), never FLOAT</li>
+      <li><b>is_published</b>: BOOLEAN</li>
+      <li><b>birthday</b>: DATE (no time of day)</li>
+      <li><b>bio</b>: TEXT (no sensible limit)</li>
+      <li><b>email</b>: VARCHAR(255). TEXT is also fine; Postgres people often prefer TEXT.</li>
+      <li><b>last_login</b>: TIMESTAMPTZ (an exact moment)</li>
+      <li><b>seat_count</b>: INTEGER</li>
+    </ul>
+    <p>Keep it fast: about 15 seconds each.</p>
+  </aside>
+</section>
+
+<section class="slide" data-seg="Live: DrawSQL" data-at="23">
+  <h2>Live: draw the Task Manager in DrawSQL</h2>
+  <div class="cols wide-left">
+    <table class="dbt types small">
+      <caption>tasks</caption>
+      <tr><th>column</th><th>type</th><th>notes</th></tr>
+      <tr><td>id</td><td>UUID</td><td>primary key</td></tr>
+      <tr><td>title</td><td>VARCHAR(255)</td><td>required</td></tr>
+      <tr><td>is_complete</td><td>BOOLEAN</td><td>defaults to false</td></tr>
+      <tr><td>due_date</td><td>DATE</td><td>optional</td></tr>
+      <tr><td>created_at</td><td>TIMESTAMPTZ</td><td>set on insert</td></tr>
+      <tr><td>project_id</td><td>UUID</td><td>points at projects.id</td></tr>
+    </table>
+    <div class="card blue">
+      <h3>drawsql.app/draw</h3>
+      <ul class="small">
+        <li>No account needed</li>
+        <li>Pick <b>PostgreSQL</b></li>
+        <li>Add table, then add columns and types</li>
+        <li>Tables: <b>users</b>, <b>projects</b>, <b>tasks</b></li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>** LIVE, about 6 minutes. **</b> Switch to the DrawSQL tab. Stories are in <code>demo-kit/user_stories.md</code>; read them out loud as you go.</p>
+    <ul>
+      <li>Click the <b>Add table</b> icon (top-left toolbar), click the canvas. Rename it in the left panel (pencil icon).</li>
+      <li>In the left panel: column name, type, <b>N</b> = nullable, key icon = primary key. <b>Add Column</b> for more.</li>
+      <li><b>users</b>: id uuid (PK), name varchar(100), email varchar(255), created_at timestamptz</li>
+      <li><b>projects</b>: id uuid (PK), name varchar(255), description text (nullable), owner_id uuid, created_at timestamptz</li>
+      <li><b>tasks</b>: the table on this slide, plus created_by uuid</li>
+    </ul>
+    <p>Ask the class for each type before you type it. Don't draw lines yet; that's after relationships.</p>
+    <p>Running long? Use <b>Import SQL</b> with <code>demo-kit/schema.sql</code> and talk through what appears.</p>
+  </aside>
+</section>
+
+<!-- ============ RELATIONSHIPS (29–39) ============ -->
+<section class="slide diagram" data-seg="Relationships" data-at="29">
+  <img src="../diagrams/DB1-03-relationships.png" alt="One-to-one: users and user_profiles. Many-to-one: tasks and projects. Many-to-many: students and courses through enrollments.">
+  <div class="src">diagrams/DB1-03-relationships.tldr</div>
+  <aside class="notes">
+    <p><b>Foreign key</b> first: a column holding the primary key of a row in another table. tasks.project_id = 3 means "I belong to project 3". It's a pointer.</p>
+    <ul>
+      <li><b>One-to-one</b>: a person and their passport. users / user_profiles. The FK has UNIQUE on it so two profiles can't point at the same user. Rare.</li>
+      <li><b>Many-to-one</b>: many employees, one company. The most common. The FK always lives on the "many" side: tasks holds project_id, projects doesn't list its tasks.</li>
+      <li><b>Many-to-many</b>: students and courses. One FK column can only hold one value, so you need a third <b>junction table</b>. It can carry its own data: grade belongs to the pairing, not to the student or the course. Its primary key is often both FKs together (a composite key).</li>
+    </ul>
+  </aside>
+</section>
+
+<section class="slide" data-seg="Relationships" data-at="31">
+  <h2>How to choose: say it both ways</h2>
+  <table class="dbt small" style="margin-bottom:28px">
+    <tr><th>Sentence</th><th>Answer</th><th>Where the FK goes</th></tr>
+    <tr><td>A task belongs to <b>one</b> project. A project has <b>many</b> tasks.</td><td>many-to-one</td><td>on tasks (the many side)</td></tr>
+    <tr><td>A user has <b>one</b> profile. A profile belongs to <b>one</b> user.</td><td>one-to-one</td><td>either side, with UNIQUE</td></tr>
+    <tr><td>A task has <b>many</b> tags. A tag is on <b>many</b> tasks.</td><td>many-to-many</td><td>a junction table: task_tags</td></tr>
+  </table>
+  <p class="bottomline">Don't reach for many-to-many unless both directions really are "many".</p>
+  <aside class="notes">
+    <p>The decision process from the reading: write the relationship in plain English, both directions. One and many = many-to-one. One and one = one-to-one. Many and many = junction table.</p>
+    <p>"New designers make everything many-to-many. Before you add a junction table, ask: is there a real case with multiple records on BOTH sides?"</p>
+  </aside>
+</section>
+
+<section class="slide activity" data-seg="Activity: Relationship Sorter" data-at="32">
+  <h2>Activity: Relationship Sorter</h2>
+  <div class="countdown" data-sec="240"></div>
+  <ol class="steps">
+    <li>I show two tables</li>
+    <li>Say it both ways in your head</li>
+    <li>In chat on "go": <b>1:1</b>, <b>M:1</b> or <b>M:M</b></li>
+    <li>Then: where does the foreign key go?</li>
+  </ol>
+  <p class="muted small" style="margin-top:24px">Page: activity-relationship-sorter/</p>
+  <aside class="notes">
+    <p>Open the page and share your screen. For each card: read the pair, count down from 3, everyone answers in chat, then click the answer to reveal the explanation.</p>
+    <p>About 20 seconds a card. The first 8 cards are the core set; stop when the timer ends. Cards 4 and 8 come straight from the Noun Hunt (recipes).</p>
+  </aside>
+</section>
+
+<section class="slide" data-seg="Live: DrawSQL" data-at="36">
+  <h2>Live: connect the tables, add tags</h2>
+  <div class="cols">
+    <div>
+      <ol>
+        <li>Drag from <b>projects.owner_id</b> to <b>users.id</b></li>
+        <li><b>tasks.project_id</b> → projects.id</li>
+        <li><b>tasks.created_by</b> → users.id</li>
+        <li>Add <b>tags</b> and the junction table <b>task_tags</b></li>
+        <li>Screenshot it. That's tomorrow's input.</li>
+      </ol>
+    </div>
+    <div class="card green">
+      <h3>The story that needs it</h3>
+      <p>"I want to label tasks with tags like <i>school</i> or <i>urgent</i> (a task can have several)."</p>
+      <p class="small muted">Several tags per task, and each tag is used on many tasks. That's many-to-many.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>** LIVE, about 3 minutes. **</b></p>
+    <ul>
+      <li>Hover a column: dots appear on its left and right edges. Drag from the FK column's dot onto the PK column it points at. A small popup lets you pick <b>1:1</b>, <b>1:N</b> or <b>N:1</b>; choose the one that reads right (many tasks to one project).</li>
+      <li>Add <b>tags</b>: id uuid (PK), name varchar(50).</li>
+      <li>Add <b>task_tags</b>: task_id uuid, tag_id uuid, both marked as key (composite primary key). Connect each to its table.</li>
+      <li>Take a screenshot of the canvas (Mac: Cmd+Shift+4, Windows: Win+Shift+S, Linux: Print Screen). Save it as <code>task-manager-erd.png</code>.</li>
+    </ul>
+    <p><b>Why a screenshot:</b> DrawSQL's free plan can't export SQL or images (File → Export shows a lock). A screenshot works fine; Claude reads images. Next lecture, Claude turns it into SQL and we review it.</p>
+    <p>Your diagram lives in this browser's storage only. Keep the tab, or make a free account to save it.</p>
+  </aside>
+</section>
+
+<section class="slide diagram" data-seg="Wrap up" data-at="39">
+  <img src="../diagrams/DB1-04-task-manager-erd.png" alt="DrawSQL diagram of the Task Manager: users, projects, tasks, task_tags and tags, connected by foreign keys">
+  <div class="src">demo-kit/task-manager-erd.png</div>
+  <aside class="notes">
+    <p>This is the backup screenshot, the same diagram you just drew. Walk it once more: "Every line is a foreign key. The crow's foot (the three-pronged end) is the many side."</p>
+    <p>"Tomorrow we hand Claude this picture plus the user stories, and it builds the real database in Supabase, one table at a time, while we check its work."</p>
+  </aside>
+</section>
+
+<section class="slide statement" data-seg="Wrap up" data-at="40">
+  <h2>Draw it first. 15 minutes of diagramming saves hours of refactoring.</h2>
+  <p>Your diagram is a thinking tool, a teamwork tool, and the instructions you give Claude.</p>
+  <aside class="notes">
+    <p>Recap in one breath: stories → nouns → tables, details → columns, pick a type for each, connect them with keys, draw it before any code.</p>
+  </aside>
+</section>
+
+<section class="slide" data-seg="Wrap up" data-at="41">
+  <h2>Homework, Part I</h2>
+  <div class="cols">
+    <div>
+      <ol style="list-style:none;padding-left:0">
+        <li><b>Priority 1, your own app:</b> map your database. Nouns → tables, details → columns, pick types, decide relationships, draw it in DrawSQL</li>
+        <li><b>Priority 2, FreeCodeCamp:</b> 50 steps of the Python certification</li>
+        <li><b>Priority 3, Netflix Clone II:</b> think through what data it needs. A users table is fine; no login yet.</li>
+      </ol>
+    </div>
+    <div class="card green">
+      <h3>Bring to next lecture</h3>
+      <ul class="small">
+        <li>A screenshot of your DrawSQL diagram</li>
+        <li>Your user stories in a <code>user_stories.md</code> file</li>
+        <li>Optional: a free <b>Supabase</b> account (sign in with GitHub)</li>
+      </ul>
+      <p class="small muted">Next time these go into a real Supabase database.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    <p>Say the order out loud: your own app first, then the certification, then the Netflix clone.</p>
+    <p>Tell them: <code>drawsql.app/draw</code> works with no account, but saves only in that browser. A free account keeps public diagrams with up to 15 tables. Export is a paid feature, so a screenshot is the plan.</p>
+  </aside>
+</section>
+
+</div>
+<script src="../shared/deck.js"></script>
+</body>
+</html>

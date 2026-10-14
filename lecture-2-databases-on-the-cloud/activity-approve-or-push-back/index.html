@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Approve or Push Back?</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --paper:#f4f6f9; --grid:#dce3ee; --ink:#1b2230; --muted:#5b6577; --blue:#2552c9; --green:#13795b; --red:#c8372d; --sticky:#ffe76a; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { font-family: 'Atkinson Hyperlegible', system-ui, sans-serif; color: var(--ink); display: grid; grid-template-rows: auto auto 1fr auto;
+    background: var(--paper) linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 40px 40px; }
+  header { padding: 20px 36px 0; display: flex; justify-content: space-between; align-items: baseline; gap: 20px; }
+  h1 { font: 800 40px 'Bricolage Grotesque', sans-serif; margin: 0; letter-spacing: -0.02em; }
+  .count { font: 700 20px 'JetBrains Mono', monospace; color: var(--muted); }
+  .bank { display: flex; flex-wrap: wrap; gap: 10px; padding: 14px 36px 0; }
+  .bank button { font: 700 22px 'JetBrains Mono', monospace; background: #fff; border: 2px solid var(--ink); border-radius: 6px; padding: 8px 18px; cursor: pointer; color: var(--ink); }
+  .bank button.hit { background: var(--green); border-color: var(--green); color: #fff; }
+  .bank button.miss { background: var(--red); border-color: var(--red); color: #fff; }
+  .bank .legend { align-self: center; font-size: 16px; color: var(--muted); margin-left: 8px; }
+  .stagearea { display: grid; place-items: center; padding: 20px 36px; }
+  .card { width: min(1100px, 100%); background: var(--sticky); padding: 48px 56px; transform: rotate(-1deg);
+    box-shadow: 0 18px 30px -12px rgb(27 34 48 / 0.35); }
+  .who { font: 700 18px 'JetBrains Mono', monospace; margin-bottom: 14px; }
+  .q { font: 700 clamp(26px, 3.2vw, 44px)/1.2 'Bricolage Grotesque', sans-serif; letter-spacing: -0.01em; }
+  .q small { display: block; font: 400 clamp(20px, 2vw, 28px)/1.45 'Atkinson Hyperlegible', sans-serif; margin-top: 18px; }
+  code { font: 600 .9em 'JetBrains Mono', monospace; }
+  .a { margin-top: 30px; background: #fff; border-left: 10px solid var(--green); padding: 18px 24px; font-size: clamp(20px, 2vw, 28px); line-height: 1.4; display: none; }
+  .a b { display: block; font: 800 clamp(28px, 3vw, 42px) 'Bricolage Grotesque', sans-serif; color: var(--green); }
+  .card.revealed .a { display: block; }
+  footer { padding: 0 36px 18px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font: 500 14px 'JetBrains Mono'; color: var(--muted); }
+  footer button { font: 700 16px 'Atkinson Hyperlegible'; padding: 10px 18px; border-radius: 8px; border: 2px solid var(--ink); background: #fff; cursor: pointer; }
+  footer button.go { background: var(--blue); color: #fff; border-color: var(--blue); }
+  button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Approve or push back?</h1>
+  <span class="count" id="count"></span>
+</header>
+<div class="bank" id="bank">
+  <button type="button">Approve</button><button type="button">Push back</button>
+  <span class="legend">You're the architect. Claude is asking (click one to answer)</span>
+</div>
+<div class="stagearea">
+  <div class="card" id="card">
+    <div class="who">Claude says… · type APPROVE or PUSH BACK in chat on "go"</div>
+    <div class="q" id="q"></div>
+    <div class="a" id="a"></div>
+  </div>
+</div>
+<footer>
+  <button id="prev">← Back</button><button class="go" id="reveal">Reveal (space)</button><button id="next">Next →</button>
+  <span>← → to move · space to reveal · first 8 cards are the core set</span>
+</footer>
+<script>
+  // [what Claude says, answer, why]
+  const Q = [
+    ["“I’ll run all five CREATE TABLE statements in one go to save time.”", "Push back",
+      "You asked for ONE table at a time with a pause after each. Speed isn’t the goal; checking each step is."],
+    ["“Created the <code>users</code> table with 4 columns. Please check it in the Table Editor before I continue.”", "Approve",
+      "Exactly the pause you asked for. Open the Table Editor, check the columns and types against your diagram, then say continue."],
+    ["“I’ll create <code>task_tags</code> first, then <code>tasks</code> and <code>tags</code>.”", "Push back",
+      "A foreign key can only point at a table that already exists. Order: users → projects → tasks → tags → task_tags."],
+    ["“I’ll store <code>is_complete</code> as TEXT so it can hold ‘yes’, ‘no’ or ‘maybe’.”", "Push back",
+      "It’s a light switch: <code>BOOLEAN NOT NULL DEFAULT false</code>. TEXT lets bad data like ‘Yes!!’ sneak in."],
+    ["“The design skill says PostgreSQL doesn’t index foreign key columns for you. I’ll add indexes on <code>tasks.project_id</code>, <code>tasks.created_by</code>, <code>projects.owner_id</code> and <code>task_tags.tag_id</code>.”", "Approve",
+      "True, and a good catch from the skill. Indexes make “all tasks in this project” fast. It also explained why, which is what you want."],
+    ["“I’m connected to project <code>acme-production</code>. Creating tables now.”", "Push back",
+      "Wrong project! Stop before anything runs. Check the project name in every message, and only connect Claude to a development project."],
+    ["“To fix a typo in a column name, I’ll DROP the <code>projects</code> table and create it again.”", "Push back",
+      "DROP deletes the table and every row in it. Ask for <code>ALTER TABLE … RENAME COLUMN</code> instead. Destructive commands always need your explicit OK."],
+    ["“Here are your <code>anon</code> key and your <code>service_role</code> key. I’ll put both in the React app’s <code>.env</code> file.”", "Push back",
+      "The service_role key skips ALL security. It must never reach the browser. The front-end only ever gets the anon (public) key."],
+    ["“Story 8 says users see when a task was created. I’ll give <code>created_at</code> a default of <code>now()</code> so it fills itself in.”", "Approve",
+      "Claude checked the schema against your user stories and found a gap. That’s the review you asked for."],
+    ["“Projects might have several owners someday, so I’ll add a <code>project_owners</code> junction table now.”", "Push back",
+      "Your stories say one owner. Don’t build many-to-many for a maybe. Change it when a real story needs it."],
+    ["“Supabase’s security advisor says Row Level Security is off on these tables. Should I turn it on?”", "Approve",
+      "Turn it on, and note that with RLS on and no rules (policies) yet, the API returns no rows. Writing those rules comes with authentication, in a future lecture."],
+    ["“I couldn’t find this in my memory, so I’ll guess the function name.”", "Push back",
+      "Don’t guess. Tell it to look it up: Context7 or the Supabase MCP’s docs search. That’s why we installed them."],
+    ["“All five tables are created. I updated <code>schema.sql</code> to match exactly what ran.”", "Approve",
+      "Your schema file and your real database agree. Commit it. Then check the Schema Visualizer one last time."],
+    ["“I inserted 3 test rows to check the foreign keys work. Want me to delete them?”", "Approve",
+      "Testing the relationships is good, and so is cleaning up. Make sure it deletes only its own test rows."],
+  ]
+  let i = 0
+  const $ = (s) => document.querySelector(s)
+  const btns = [...document.querySelectorAll('#bank button')]
+  function draw() {
+    $('#card').classList.remove('revealed')
+    $('#q').innerHTML = Q[i][0]
+    $('#a').innerHTML = `<b>${Q[i][1]}</b>${Q[i][2]}`
+    $('#count').textContent = `${i + 1} / ${Q.length}`
+    btns.forEach((s) => s.className = '')
+  }
+  function reveal(picked) {
+    $('#card').classList.add('revealed')
+    btns.forEach((s) => s.className = s.textContent === Q[i][1] ? 'hit' : (s.textContent === picked ? 'miss' : ''))
+  }
+  btns.forEach((b) => b.onclick = () => reveal(b.textContent))
+  const go = (n) => { i = Math.min(Math.max(n, 0), Q.length - 1); draw() }
+  $('#prev').onclick = () => go(i - 1); $('#next').onclick = () => go(i + 1); $('#reveal').onclick = () => reveal()
+  addEventListener('keydown', (e) => {
+    if (e.key === ' ') { e.preventDefault(); reveal() }
+    if (e.key === 'ArrowRight') go(i + 1)
+    if (e.key === 'ArrowLeft') go(i - 1)
+  })
+  draw()
+</script>
+</body>
+</html>

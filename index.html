@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Databases and Supabase</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root { --paper:#f4f6f9; --grid:#dce3ee; --ink:#1b2230; --muted:#5b6577; --blue:#2552c9; --green:#13795b; --sticky:#ffe76a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Atkinson Hyperlegible', system-ui, sans-serif; color: var(--ink); font-size: 18px; line-height: 1.5;
+    background: var(--paper) linear-gradient(var(--grid) 1px, transparent 1px) -1px -1px / 40px 40px,
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px) -1px -1px / 40px 40px; }
+  main { max-width: 1120px; margin: 0 auto; padding: 64px 28px 80px; }
+  h1 { font: 800 clamp(44px, 7vw, 80px)/0.95 'Bricolage Grotesque', sans-serif; letter-spacing: -0.03em; margin: 0 0 16px; }
+  .lede { max-width: 60ch; color: var(--muted); font-size: 20px; margin: 0 0 48px; }
+  .lectures { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; }
+  section { background: #fff; border: 2px solid var(--ink); border-radius: 4px; padding: 28px; }
+  .num { font: 800 64px/1 'Bricolage Grotesque', sans-serif; color: var(--blue); }
+  h2 { font: 800 30px/1.1 'Bricolage Grotesque', sans-serif; margin: 8px 0 6px; letter-spacing: -0.01em; }
+  section > p { margin: 0 0 22px; color: var(--muted); }
+  a.slides { display: block; background: var(--sticky); color: var(--ink); text-decoration: none; padding: 20px 22px; margin-bottom: 18px;
+    transform: rotate(-0.8deg); box-shadow: 0 10px 18px -10px rgb(27 34 48 / 0.45); transition: transform .15s; }
+  a.slides:hover, a.slides:focus-visible { transform: rotate(0deg) translateY(-2px); }
+  a.slides b { display: block; font: 800 26px 'Bricolage Grotesque', sans-serif; }
+  ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  ol a { display: block; padding: 14px 16px; border: 2px solid var(--grid); border-radius: 4px; color: var(--ink); text-decoration: none; }
+  ol a:hover, ol a:focus-visible { border-color: var(--blue); }
+  ol a b { color: var(--blue); }
+  ol a span { display: block; color: var(--muted); font-size: 16px; }
+  h3 { font: 800 26px 'Bricolage Grotesque', sans-serif; margin: 56px 0 14px; }
+  .kit { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .kit a { background: #fff; }
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  .gallery figure { margin: 0; background: #fff; border: 2px solid var(--grid); border-radius: 4px; padding: 8px; }
+  .gallery img { width: 100%; aspect-ratio: 16/10; object-fit: cover; object-position: top; display: block; }
+  .gallery figcaption { font-size: 15px; padding: 6px 2px 0; display: flex; justify-content: space-between; gap: 8px; }
+  .gallery figcaption a { color: var(--blue); }
+  .install { margin-bottom: 20px; }
+  .install h4 { font: 800 21px 'Bricolage Grotesque', sans-serif; margin: 28px 0 6px; }
+  .install h4:first-child { margin-top: 0; }
+  .install .steps { display: block; list-style: decimal; padding-left: 1.4em; margin: 0 0 14px; }
+  .install .steps li::marker { font-weight: 700; color: var(--blue); } .install .steps li { margin-bottom: 12px; }
+  .install code { font-size: 0.9em; background: #e8ecf3; padding: 1px 5px; border-radius: 3px; }
+  .cmdwrap { position: relative; margin: 8px 0 6px; }
+  pre.cmd { background: var(--ink); color: #fff; padding: 16px 18px; padding-right: 90px; border-radius: 4px; overflow-x: auto; margin: 0; font-size: 15px; }
+  pre.cmd code { background: none; padding: 0; }
+  .copy { position: absolute; top: 10px; right: 10px; font: 700 14px 'Atkinson Hyperlegible'; padding: 6px 12px; border-radius: 4px; border: 0; background: var(--sticky); color: var(--ink); cursor: pointer; }
+  .fail { margin: 0 0 8px; padding: 14px 18px; background: var(--sticky); transform: rotate(-0.4deg); }
+  .install .steps a, details a { display: inline; padding: 0; border: 0; color: var(--blue); text-decoration: underline; }
+  details { margin: 6px 0 14px; }
+  summary { cursor: pointer; font-weight: 700; color: var(--blue); }
+  footer { margin-top: 56px; color: var(--muted); font-size: 16px; }
+  a:focus-visible, summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { a.slides { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Databases and Supabase</h1>
+  <p class="lede">Turn your user stories into a database design, then have Claude Code build it in the cloud while you check every step. Everything opens in a new tab, so keep this page open as your home base.</p>
+
+  <div class="lectures">
+    <section>
+      <div class="num">1</div>
+      <h2>Relational Databases</h2>
+      <p>Tables, columns, types and relationships, drawn in DrawSQL.</p>
+      <a class="slides" href="lecture-1-relational-databases/slides.html" target="_blank" rel="noopener"><b>Open the slides</b>Arrow keys to move, F for fullscreen</a>
+      <ol>
+        <li><a href="lecture-1-relational-databases/activity-noun-hunt/" target="_blank" rel="noopener"><b>Activity: Noun Hunt</b><span>Recipe Box user stories. Which words become tables, which become columns?</span></a></li>
+        <li><a href="lecture-1-relational-databases/activity-relationship-sorter/" target="_blank" rel="noopener"><b>Activity: Relationship Sorter</b><span>Two tables at a time. One-to-one, many-to-one or many-to-many?</span></a></li>
+        <li><a href="https://drawsql.app/draw" target="_blank" rel="noopener"><b>DrawSQL</b><span>Draw your diagram. Pick PostgreSQL. No account needed to start.</span></a></li>
+      </ol>
+    </section>
+    <section>
+      <div class="num">2</div>
+      <h2>Databases on the Cloud</h2>
+      <p>Supabase + Claude Code, one table at a time.</p>
+      <a class="slides" href="lecture-2-databases-on-the-cloud/slides.html" target="_blank" rel="noopener"><b>Open the slides</b>Arrow keys to move, F for fullscreen</a>
+      <ol>
+        <li><a href="lecture-2-databases-on-the-cloud/activity-approve-or-push-back/" target="_blank" rel="noopener"><b>Activity: Approve or Push Back?</b><span>Things Claude might say while building your database. Would you let it?</span></a></li>
+        <li><a href="https://supabase.com/dashboard/sign-up" target="_blank" rel="noopener"><b>Supabase</b><span>Sign up with GitHub. Free plan, no credit card.</span></a></li>
+      </ol>
+    </section>
+  </div>
+
+  <h3>Homework setup: your database, step by step</h3>
+  <section class="install">
+    <h4>1 · Draw your database</h4>
+    <ol class="steps">
+      <li>Open <a href="https://drawsql.app/draw" target="_blank" rel="noopener">drawsql.app/draw</a>, choose <b>PostgreSQL</b>, then <b>Start with a blank canvas</b>.</li>
+      <li>Add a table per noun in your user stories, a column per detail, and a type for every column. Drag from a foreign key column's dot onto the column it points at to draw a relationship.</li>
+      <li><b>Take a screenshot</b> of the whole diagram (Mac: Cmd+Shift+4, Windows: Win+Shift+S, Linux: Print Screen). Exporting is a paid DrawSQL feature; a screenshot is all Claude needs.</li>
+      <li>Without an account, the diagram is saved only in that browser. A free account keeps it (public diagrams, up to 15 tables).</li>
+    </ol>
+
+    <h4>2 · Create a Supabase project and a folder for it</h4>
+    <ol class="steps">
+      <li>At <a href="https://supabase.com/dashboard/sign-up" target="_blank" rel="noopener">supabase.com</a>, sign in with GitHub → <b>New project</b> → name, generated password (save it), nearest region, Free plan.</li>
+      <li>Make a folder for this database and put your files in it: your diagram screenshot and a <code>user_stories.md</code>.
+        <div class="cmdwrap"><pre class="cmd"><code>mkdir -p ~/my-app-db && cd ~/my-app-db</code></pre><button type="button" class="copy">Copy</button></div></li>
+    </ol>
+
+    <h4>3 · Connect Claude Code with the Supabase MCP</h4>
+    <ol class="steps">
+      <li>In your Supabase project, click <b>Connect</b> in the top bar → <b>MCP</b> → <b>Claude Code</b>, and copy the command. It looks like this (yours has your own <code>project_ref</code>):
+        <div class="cmdwrap"><pre class="cmd"><code>claude mcp add --scope project --transport http supabase "https://mcp.supabase.com/mcp?project_ref=YOUR_REF"</code></pre></div></li>
+      <li>Paste it in a terminal <b>inside your folder</b> (not inside Claude). Windows: use the Ubuntu (WSL) app.</li>
+      <li>Start <code>claude</code>, trust the folder, and choose <b>Use this MCP server</b>.</li>
+      <li>Type <code>/mcp</code> → <b>supabase</b> → <b>Authenticate</b>. Approve in the browser tab that opens, then come back.</li>
+    </ol>
+
+    <h4>4 · Add the database design skill (and Context7)</h4>
+    <ol class="steps">
+      <li>In a terminal in the same folder:
+        <div class="cmdwrap"><pre class="cmd"><code>curl -fsSL https://kabeier.github.io/Databases-and-Supabase/demo-kit/setup-db-skill.sh | bash</code></pre><button type="button" class="copy">Copy</button></div>
+        It should finish with a ✓ line. Inside Claude, <code>/skills</code> should list <b>postgresql-table-design</b>.</li>
+      <li>If you don't have Context7 from the SPA lecture yet (<code>claude mcp list</code> to check):
+        <div class="cmdwrap"><pre class="cmd"><code>claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp</code></pre><button type="button" class="copy">Copy</button></div></li>
+    </ol>
+    <details>
+      <summary>The skill script failed? Install it by hand (no git needed)</summary>
+      <p>Run this in your folder. It downloads the skill's two files into the right place:</p>
+      <div class="cmdwrap"><pre class="cmd"><code>S=.claude/skills/postgresql-table-design
+R=https://raw.githubusercontent.com/wshobson/agents/main/plugins/database-design/skills/postgresql-table-design
+mkdir -p $S/references
+curl -fsSL $R/SKILL.md -o $S/SKILL.md
+curl -fsSL $R/references/details.md -o $S/references/details.md</code></pre><button type="button" class="copy">Copy</button></div>
+    </details>
+
+    <h4>5 · Paste the prompt, then verify every table</h4>
+    <ol class="steps">
+      <li>Start from <a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/prompt.md" target="_blank" rel="noopener">the class prompt</a>. Change the first sentence to describe your app and the file names to yours.</li>
+      <li>Review <code>schema.sql</code> before you approve it. After each table, check the <b>Table Editor</b>. When it's done, the <b>Schema Visualizer</b> should match your diagram.</li>
+    </ol>
+  </section>
+
+  <ol class="kit">
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/prompt.md" target="_blank" rel="noopener"><b>The database prompt</b><span>What we pasted into Claude Code.</span></a></li>
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/user_stories.md" target="_blank" rel="noopener"><b>user_stories.md</b><span>The Task Manager stories from the demo.</span></a></li>
+    <li><a href="demo-kit/task-manager-erd.png" target="_blank" rel="noopener"><b>task-manager-erd.png</b><span>The demo's DrawSQL diagram.</span></a></li>
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/schema.sql" target="_blank" rel="noopener"><b>schema.sql</b><span>The finished Task Manager schema, for comparison.</span></a></li>
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/.claude/agents/supabase-agent.md" target="_blank" rel="noopener"><b>supabase-agent.md</b><span>The reusable Supabase sub-agent.</span></a></li>
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/setup-db-skill.sh" target="_blank" rel="noopener"><b>setup-db-skill.sh</b><span>Installs the postgresql-table-design skill.</span></a></li>
+  </ol>
+
+  <h3>Diagrams</h3>
+  <div class="gallery" id="gallery"></div>
+
+  <footer>Want to edit a diagram? Download its .tldr file and drag it onto <a href="https://www.tldraw.com" target="_blank" rel="noopener">tldraw.com</a>. Front-end lectures: <a href="https://kabeier.github.io/SPAs-and-Claude/" target="_blank" rel="noopener">SPAs and Claude</a>.</footer>
+</main>
+<script>
+  document.querySelectorAll('.copy').forEach((b) => b.onclick = async () => {
+    await navigator.clipboard.writeText(b.previousElementSibling.innerText.trim()); b.textContent = 'Copied'; setTimeout(() => (b.textContent = 'Copy'), 1500)
+  })
+  const DIAGRAMS = [
+    ['DB1-01-library', 'A database is a library', true], ['DB1-02-nouns-to-tables', 'Nouns become tables', true],
+    ['DB1-03-relationships', 'Three kinds of relationships', true], ['DB1-04-task-manager-erd', 'Task Manager ERD (DrawSQL)', false],
+    ['DB2-01-where-data-lives', 'Where your data lives', true], ['DB2-02-supabase', 'What Supabase gives you', true],
+    ['DB2-03-pause-and-verify', 'Pause and verify', true],
+  ]
+  document.getElementById('gallery').innerHTML = DIAGRAMS.map(([f, t, tldr]) => `
+    <figure><a href="diagrams/${f}.png" target="_blank" rel="noopener"><img src="diagrams/${f}.png" alt="${t}" loading="lazy"></a>
+    <figcaption>${t}${tldr ? `<a href="diagrams/${f}.tldr" download>.tldr</a>` : ''}</figcaption></figure>`).join('')
+</script>
+</body>
+</html>

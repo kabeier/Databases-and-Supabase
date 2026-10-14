@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noun Hunt: Recipe Box</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --paper:#f4f6f9; --grid:#dce3ee; --ink:#1b2230; --muted:#5b6577; --blue:#2552c9; --green:#13795b; --red:#c8372d; --sticky:#ffe76a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Atkinson Hyperlegible', system-ui, sans-serif; color: var(--ink); font-size: 20px; line-height: 1.5;
+    background: var(--paper) linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 40px 40px; }
+  main { max-width: 1180px; margin: 0 auto; padding: 32px 28px 64px; }
+  h1 { font: 800 clamp(36px, 5vw, 56px)/1 'Bricolage Grotesque', sans-serif; letter-spacing: -0.02em; margin: 0 0 10px; }
+  .lede { color: var(--muted); margin: 0 0 22px; max-width: 70ch; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 18px; font-size: 17px; }
+  .chip { padding: 2px 10px; border-radius: 5px; font-weight: 700; }
+  .chip.t { background: var(--blue); color: #fff; } .chip.c { background: #c9efdc; color: #0b4d39; border: 2px solid var(--green); }
+  .legend button { font: 700 16px 'Atkinson Hyperlegible'; padding: 8px 14px; border-radius: 6px; border: 2px solid var(--ink); background: #fff; cursor: pointer; }
+  .legend button.key { background: var(--ink); color: #fff; }
+  ol.stories { background: #fff; border: 2px solid var(--ink); border-radius: 4px; padding: 22px 28px 22px 58px; margin: 0; }
+  ol.stories li { margin-bottom: 14px; font-size: clamp(19px, 1.9vw, 25px); }
+  ol.stories li::marker { font-weight: 700; color: var(--blue); }
+  .w { cursor: pointer; border-radius: 3px; }
+  .w:hover { background: #e8ecf3; }
+  .w.t { background: var(--blue); color: #fff; }
+  .w.c { background: #c9efdc; box-shadow: inset 0 -3px 0 var(--green); }
+  .post { margin-top: 22px; background: var(--sticky); padding: 18px 22px; transform: rotate(-0.4deg); }
+  .post pre { font: 500 17px 'JetBrains Mono', monospace; margin: 8px 0 0; white-space: pre-wrap; }
+  #key { display: none; margin-top: 28px; }
+  #key.on { display: block; }
+  #key h2 { font: 800 32px 'Bricolage Grotesque', sans-serif; margin: 0 0 14px; }
+  .tables { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .tbl { background: #fff; border: 2px solid var(--ink); border-radius: 4px; }
+  .tbl h3 { margin: 0; padding: 8px 14px; background: #e8ecf3; font: 700 20px 'JetBrains Mono', monospace; border-bottom: 2px solid var(--ink); }
+  .tbl.hidden h3 { background: var(--sticky); }
+  .tbl ul { list-style: none; margin: 0; padding: 10px 14px; font: 500 16px/1.7 'JetBrains Mono', monospace; }
+  .tbl li span { color: var(--blue); float: right; }
+  .tbl p { margin: 0; padding: 0 14px 12px; font-size: 16px; color: var(--muted); }
+  .traps { margin-top: 18px; background: #fff; border-left: 8px solid var(--red); padding: 14px 20px; }
+  .traps li { margin-bottom: 6px; }
+  button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Noun Hunt: Recipe Box</h1>
+  <p class="lede">Read the user stories. Which nouns become tables? Which details become columns? Click a word once to mark it as a <b>table</b>, twice for a <b>column</b>, a third time to clear it.</p>
+  <div class="legend">
+    <span class="chip t">table</span><span class="chip c">column</span>
+    <button type="button" id="clear">Clear my marks</button>
+    <button type="button" class="key" id="toggle">Show answer key (K)</button>
+  </div>
+
+  <ol class="stories" id="stories">
+    <li>As a home cook, I want to create an account with a username and email so that my recipes are saved to me.</li>
+    <li>As a home cook, I want to post a recipe with a title, instructions, a cooking time, and a photo so that I can share it.</li>
+    <li>As a home cook, I want to put each recipe in one category, like Breakfast or Dessert, so that people can browse.</li>
+    <li>As a home cook, I want to list the ingredients for a recipe with an amount for each (2 cups flour) so that others can shop for it.</li>
+    <li>As a home cook, I want to leave a star rating from 1 to 5 and a comment on a recipe so that I can say how it went.</li>
+    <li>As a home cook, I want to mark a recipe as vegetarian so that people can filter for it.</li>
+    <li>As a home cook, I want to save other people's recipes to my favorites so that I can find them later.</li>
+  </ol>
+
+  <div class="post">
+    <b>Post in chat like this:</b>
+    <pre>recipes: title, instructions, ...
+users: ...
+(one line per table)</pre>
+  </div>
+
+  <section id="key" aria-live="polite">
+    <h2>Answer key</h2>
+    <div class="tables">
+      <div class="tbl"><h3>users</h3><ul>
+        <li>id <span>UUID (PK)</span></li><li>username <span>VARCHAR(50)</span></li><li>email <span>VARCHAR(255)</span></li><li>created_at <span>TIMESTAMPTZ</span></li></ul>
+        <p>"home cook" and "account" both mean a user.</p></div>
+      <div class="tbl"><h3>recipes</h3><ul>
+        <li>id <span>UUID (PK)</span></li><li>title <span>VARCHAR(255)</span></li><li>instructions <span>TEXT</span></li><li>cook_minutes <span>INTEGER</span></li><li>photo_url <span>TEXT</span></li><li>is_vegetarian <span>BOOLEAN</span></li><li>author_id <span>→ users</span></li><li>category_id <span>→ categories</span></li><li>created_at <span>TIMESTAMPTZ</span></li></ul></div>
+      <div class="tbl"><h3>categories</h3><ul>
+        <li>id <span>UUID (PK)</span></li><li>name <span>VARCHAR(50)</span></li></ul>
+        <p>A fixed list people browse. (A plain text column also works for a tiny app.)</p></div>
+      <div class="tbl"><h3>ingredients</h3><ul>
+        <li>id <span>UUID (PK)</span></li><li>name <span>VARCHAR(100)</span></li></ul></div>
+      <div class="tbl"><h3>reviews</h3><ul>
+        <li>id <span>UUID (PK)</span></li><li>rating <span>INTEGER (1–5)</span></li><li>comment <span>TEXT</span></li><li>user_id <span>→ users</span></li><li>recipe_id <span>→ recipes</span></li><li>created_at <span>TIMESTAMPTZ</span></li></ul></div>
+      <div class="tbl hidden"><h3>recipe_ingredients</h3><ul>
+        <li>recipe_id <span>→ recipes</span></li><li>ingredient_id <span>→ ingredients</span></li><li>amount <span>VARCHAR(50)</span></li></ul>
+        <p>Hidden table #1. "2 cups" belongs to this recipe plus this ingredient, so it lives on a junction table.</p></div>
+      <div class="tbl hidden"><h3>favorites</h3><ul>
+        <li>user_id <span>→ users</span></li><li>recipe_id <span>→ recipes</span></li><li>saved_at <span>TIMESTAMPTZ</span></li></ul>
+        <p>Hidden table #2. A user saves many recipes; a recipe is saved by many users.</p></div>
+    </div>
+    <div class="traps"><b>Traps</b>
+      <ul>
+        <li><b>photo</b> is a column (a URL to the image), not a table.</li>
+        <li><b>vegetarian</b> is a yes/no column: <code>is_vegetarian BOOLEAN</code>.</li>
+        <li><b>star rating</b> is a column on reviews, not its own table.</li>
+        <li><b>cooking time</b>: store a number of minutes (INTEGER), not text like "about an hour".</li>
+        <li>Nobody asked for <b>created_at</b>, but nearly every table gets one.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+<script>
+  // Wrap every word in the stories in a clickable span: none → table → column → none
+  document.querySelectorAll('#stories li').forEach((li) => {
+    li.innerHTML = li.textContent.replace(/([A-Za-z0-9'’]+)/g, '<span class="w" tabindex="0">$1</span>')
+  })
+  const cycle = (w) => { w.className = w.classList.contains('t') ? 'w c' : w.classList.contains('c') ? 'w' : 'w t' }
+  document.querySelectorAll('.w').forEach((w) => {
+    w.onclick = () => cycle(w)
+    w.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); cycle(w) } }
+  })
+  const key = document.getElementById('key'), toggle = document.getElementById('toggle')
+  const flip = () => { key.classList.toggle('on'); toggle.textContent = key.classList.contains('on') ? 'Hide answer key (K)' : 'Show answer key (K)'; if (key.classList.contains('on')) key.scrollIntoView({ behavior: 'smooth' }) }
+  toggle.onclick = flip
+  document.getElementById('clear').onclick = () => document.querySelectorAll('.w').forEach((w) => (w.className = 'w'))
+  addEventListener('keydown', (e) => { if ((e.key === 'k' || e.key === 'K') && !e.target.closest('.w')) flip() })
+</script>
+</body>
+</html>

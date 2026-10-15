@@ -150,18 +150,20 @@ claude          <span class="c"># trust the folder → "Use this MCP server"</sp
 <section class="slide" data-seg="Live: connect Claude" data-at="14">
   <h2>Live: add the database design skill</h2>
   <div class="cols wide-left">
-    <pre style="font-size:20px"><span class="c"># in the same folder, in a terminal (not inside Claude)</span>
+    <pre style="font-size:19px"><span class="c"># NEW terminal tab: go to the supabase folder first</span>
+cd ~/demos/ticked/supabase
 curl -fsSL https://kabeier.github.io/Databases-and-Supabase/demo-kit/setup-db-skill.sh | bash
 
-<span class="c"># then inside Claude</span>
+<span class="c"># then inside Claude (still running in tab 1)</span>
 /skills</pre>
     <div class="card blue">
       <h3>postgresql-table-design</h3>
       <p class="small">A rulebook for good PostgreSQL tables: types, keys, constraints, indexes. It covers things we haven't had time for.</p>
+      <p class="small"><b>Lands in</b> <code>ticked/supabase/.claude/skills/</code>, next to the Supabase MCP. The app's design skills stay in <code>ticked/.claude/</code>.</p>
     </div>
   </div>
   <aside class="notes">
-    <p><b>** LIVE. **</b> Open a second terminal tab in <code>~/demos/ticked/supabase</code> (Claude keeps running in the first), paste the one-liner, watch for the ✓ line. In Claude, <code>/skills</code> should list <b>postgresql-table-design</b>. If it doesn't show, exit Claude and start it again.</p>
+    <p><b>** LIVE. **</b> Open a second terminal tab and <code>cd ~/demos/ticked/supabase</code> first (Claude keeps running in the first tab). Say why: "The skill goes where the database's Claude runs, next to its MCP. If you run this in the app's root folder, the database session won't see it." Paste the one-liner, watch for the ✓ line. In Claude, <code>/skills</code> should list <b>postgresql-table-design</b>. If it doesn't show, exit Claude and start it again.</p>
     <p>"Same idea as the design skills last lecture: a folder of rules Claude reads when it's relevant."</p>
     <p>Heads up: this skill prefers <code>TEXT</code> over <code>VARCHAR</code> and sometimes BIGINT ids over UUID. If Claude suggests changes to your diagram, that's a design discussion. You decide.</p>
   </aside>

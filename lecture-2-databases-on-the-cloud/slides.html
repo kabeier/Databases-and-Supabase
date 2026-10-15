@@ -176,9 +176,11 @@ curl -fsSL https://kabeier.github.io/Databases-and-Supabase/demo-kit/setup-db-sk
     <div class="card green"><h3>The diagram</h3><p>Your DrawSQL screenshot. Claude reads images: every table, column and line.</p></div>
     <div class="card"><h3>schema.sql</h3><p>Claude writes it from your diagram. You review it before anything runs.</p></div>
   </div>
-  <pre style="margin-top:32px;font-size:22px">cp ~/db-kit/user_stories.md ~/db-kit/task-manager-erd.png .</pre>
+  <p class="bottomline">Put both files in your <code>supabase</code> folder. (In the project root? Use <code>@../</code> in the prompt.)</p>
   <aside class="notes">
-    <p><b>** LIVE. **</b> Copy the two files in (or use the screenshot you took in Lecture 1). Open the PNG so the class sees what Claude will see.</p>
+    <p><b>** LIVE. **</b> Your copy (terminal 2, in <code>~/demos/ticked/supabase</code>): <code>cp ~/db-kit/user_stories.md ~/db-kit/task-manager-erd.png .</code> (or use the screenshot you took in Lecture 1). Don't put that command on screen: students' files are wherever they saved them. Drag them in with Finder or Explorer, or use their editor.</p>
+    <p>Why the supabase folder is easiest: Claude is running there, so the prompt can say <code>@user_stories.md</code>. If the files are in the project root, write <code>@../user_stories.md</code> (<code>..</code> means "one folder up").</p>
+    <p>Open the PNG so the class sees what Claude will see.</p>
     <p>Why Claude writes the SQL: the curriculum reading says to export SQL from DrawSQL, but DrawSQL's free plan can't export (File → Export has a lock). So we let Claude write <code>schema.sql</code> from the picture, and add a review step. If you have a paid DrawSQL plan, export the SQL instead and skip that step.</p>
     <p>A good diagram for Claude: no overlapping tables, every column has a name and type, the lines are visible, and it's not zoomed out so far the text is unreadable.</p>
   </aside>

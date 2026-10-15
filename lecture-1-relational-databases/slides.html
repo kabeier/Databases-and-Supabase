@@ -106,13 +106,14 @@ WHERE is_complete = false;
 
 <!-- ============ FROM STORIES TO TABLES (9–18) ============ -->
 <section class="slide diagram" data-seg="Stories → tables" data-at="9">
-  <img src="../diagrams/DB1-02-nouns-to-tables.png" alt="User stories with the nouns in capitals; each noun becomes a table and its details become columns">
+  <img src="../diagrams/DB1-02-nouns-to-tables.png" alt="User stories with the nouns in capitals; each noun becomes a table and its details become columns. Write the stories down in user_stories.md: Claude reads it later to build the database.">
   <div class="src">diagrams/DB1-02-nouns-to-tables.tldr</div>
   <aside class="notes">
     <p>"You already wrote user stories for your app. They're the start of your database too." Read the stories, point at the nouns in caps: USER, PROJECT, TASK, TAG. Each becomes a table.</p>
     <p><b>Show where they came from (30 sec).</b> Open Ticked's <code>app_outline/pages/</code> (one <code>user_story.md</code> per page, from the SPA lectures) next to <code>demo-kit/user_stories.md</code>. "I went through the page stories and pulled out one list: just the things the app has to <i>remember</i>. One line each. I added one the pages didn't have: an account. That's <code>user_stories.md</code>, and it's your homework too."</p>
     <p>Then the details: a task has a title, a due date, a done flag, a created time. Those become columns.</p>
     <p>USER is a noun too: it becomes a <b>users</b> table. Ticked has no login screen yet (that's a future lecture), but the database is ready for it: every project and task will know who it belongs to.</p>
+    <p><b>Point at the green box at the bottom:</b> "When we do this, we write the stories down, one per line, in a file called <code>user_stories.md</code>. That file isn't just for us. Next lecture we hand it to our Claude agents, along with the diagram we're about to draw, and Claude builds the database from them. Clear stories in, a clear database out."</p>
     <p>"No computer needed. Careful reading and clear thinking."</p>
   </aside>
 </section>

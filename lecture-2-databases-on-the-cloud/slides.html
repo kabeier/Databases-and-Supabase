@@ -13,7 +13,7 @@
 <section class="slide title" data-seg="Open" data-at="0">
   <div class="kicker">Building Applications · Relational Databases · Part 2 of 2</div>
   <h1>Databases on the cloud: Supabase + Claude Code</h1>
-  <p class="sub">Yesterday you drew the database. Today Claude builds it in the cloud, you check every step, and Ticked stops forgetting.</p>
+  <p class="sub">Last lecture you drew the database. Now Claude builds it in the cloud, you check every step, and Ticked stops forgetting.</p>
   <aside class="notes">
     <p><b>Before class</b> (see demo-kit/RUNBOOK.md): logged in to supabase.com in your browser, with <b>no project created yet</b> (you create it live). <code>~/db-kit</code> holds the demo kit. <code>~/demos/task-manager</code> holds a fresh copy of Ticked with <code>npm install</code> done. Context7 is still installed from the SPA lecture (<code>claude mcp list</code>). One terminal open in <code>~/demos/task-manager</code>.</p>
     <p>Tabs ready: Supabase dashboard, the Approve or Push Back page. Press <b>T</b> to start the clock.</p>
@@ -35,10 +35,10 @@
 </section>
 
 <section class="slide diagram" data-seg="Open" data-at="2">
-  <img src="../diagrams/DB1-04-task-manager-erd.png" alt="Yesterday's DrawSQL diagram: projects, tasks, task_tags and tags">
+  <img src="../diagrams/DB1-04-task-manager-erd.png" alt="The DrawSQL diagram from Lecture 1: projects, tasks, task_tags and tags">
   <div class="src">demo-kit/task-manager-erd.png</div>
   <aside class="notes">
-    <p>"This is where we stopped yesterday: four tables, three foreign keys, on paper. Today it becomes a real database that remembers."</p>
+    <p>"This is where we stopped last lecture: four tables, three foreign keys, on paper. Now it becomes a real database that remembers."</p>
     <p>Quick check, chat: "Which table is the junction table, and why does it exist?" (task_tags: tasks and tags are many-to-many.)</p>
   </aside>
 </section>
@@ -59,7 +59,7 @@
   <div class="src">diagrams/DB2-02-supabase.tldr</div>
   <aside class="notes">
     <p><b>Backend as a Service</b>: "Building a back-end from scratch is pouring concrete, framing walls, running plumbing. Supabase hands you the keys to a furnished apartment."</p>
-    <p>At the center is a real PostgreSQL database, so everything from yesterday applies directly. Around it: a visual dashboard, an API generated from your tables, auth and file storage (future lectures), and an MCP server so Claude Code can work with it.</p>
+    <p>At the center is a real PostgreSQL database, so everything from Lecture 1 applies directly. Around it: a visual dashboard, an API generated from your tables, auth and file storage (future lectures), and an MCP server so Claude Code can work with it.</p>
   </aside>
 </section>
 
@@ -168,7 +168,7 @@ curl -fsSL https://kabeier.github.io/Databases-and-Supabase/demo-kit/setup-db-sk
   </div>
   <pre style="margin-top:32px;font-size:22px">cp ~/db-kit/user_stories.md ~/db-kit/task-manager-erd.png .</pre>
   <aside class="notes">
-    <p><b>** LIVE. **</b> Copy the two files in (or use the screenshot you took yesterday). Open the PNG so the class sees what Claude will see.</p>
+    <p><b>** LIVE. **</b> Copy the two files in (or use the screenshot you took in Lecture 1). Open the PNG so the class sees what Claude will see.</p>
     <p>Why Claude writes the SQL: the curriculum reading says to export SQL from DrawSQL, but DrawSQL's free plan can't export (File → Export has a lock). So we let Claude write <code>schema.sql</code> from the picture, and add a review step. If you have a paid DrawSQL plan, export the SQL instead and skip that step.</p>
     <p>A good diagram for Claude: no overlapping tables, every column has a name and type, the lines are visible, and it's not zoomed out so far the text is unreadable.</p>
   </aside>
@@ -285,7 +285,7 @@ Please:
 5. Don't add sample data. Then stop and tell me how to run it.</pre>
   <aside class="notes">
     <p>Full text: <code>demo-kit/connect-prompt.md</code>. Paste it into the <b>same</b> Claude session: it already knows the tables.</p>
-    <p>"Why does this work in one prompt? Because when we built Ticked, we told Claude to keep all the data code in one file, shaped like these tables. Planning yesterday pays off today."</p>
+    <p>"Why does this work in one prompt? Because when we built Ticked, we told Claude to keep all the data code in one file, shaped like these tables. Planning ahead pays off."</p>
     <p>This is the curriculum's "load the schema, then CRUD functions, then wire up the UI", done as one small change because the UI was already built around the data layer.</p>
   </aside>
 </section>
@@ -312,7 +312,7 @@ Please:
       </ul>
     </div>
   </div>
-  <p class="bottomline">Yesterday a refresh wiped everything. Today the data lives in PostgreSQL.</p>
+  <p class="bottomline">In Lecture 1 a refresh wiped everything. Now the data lives in PostgreSQL.</p>
   <aside class="notes">
     <p><b>** LIVE, about 6 minutes. **</b> Approve the Context7 lookups. When Claude proposes policies, read one out loud: "<i>for select to anon using (true)</i>: anyone with the public key can read every row. Fine for fake class data, not for real users." Then approve the Supabase call.</p>
     <p>When it's done, in a second terminal: <code>npm run dev</code>. Ticked opens <b>empty</b> (the database has no rows). Point at the empty state: "That's not a bug, our database is empty."</p>
@@ -361,9 +361,9 @@ skills: [postgresql-table-design]</pre>
   <div class="cols">
     <div>
       <ol style="list-style:none;padding-left:0">
-        <li><b>Priority 1, your own app:</b> put your database on Supabase. New project, Supabase MCP, the skill, your stories and diagram, one table at a time. Stretch: connect your app with prompt 2</li>
-        <li><b>Priority 2, FreeCodeCamp:</b> 100 steps of the JavaScript certification</li>
-        <li><b>Priority 3, Netflix Clone II:</b> build its schema on Supabase. A users table is fine; no login yet.</li>
+        <li><b>Priority 1, Netflix Clone II:</b> build its schema on Supabase. A users table is fine; no login yet.</li>
+        <li><b>Priority 2, your own app:</b> put your database on Supabase. New project, Supabase MCP, the skill, your stories and diagram, one table at a time. Stretch: connect your app with prompt 2</li>
+        <li><b>Priority 3, FreeCodeCamp:</b> 100 steps of the JavaScript certification</li>
       </ol>
     </div>
     <div class="card green">
@@ -377,7 +377,7 @@ skills: [postgresql-table-design]</pre>
     </div>
   </div>
   <aside class="notes">
-    <p>Say the order out loud: your own app first, then the certification, then the Netflix clone.</p>
+    <p>Say the order out loud: the Netflix clone first, then your own app, then the certification.</p>
     <p>Remind them: the MCP command is per project, so the Netflix clone gets its own folder and its own <code>claude mcp add</code> from its own Connect menu.</p>
   </aside>
 </section>

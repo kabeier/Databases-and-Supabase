@@ -100,7 +100,7 @@ One terminal in `~/demos/task-manager`. Add a second tab when you install the sk
 | 13 (~18–22) | browser | Approve or Push Back activity (core 8) while Claude researches and writes `schema.sql` | — |
 | 15 (~23) | Claude + browser | Review `schema.sql` out loud (4 tables, RLS on), approve, then check each table in the Table Editor. At the end: Database → Schema Visualizer | "Looks right? Continue. Looks wrong? Stop." |
 | 17 (~30) | Claude | Paste prompt 2 from `connect-prompt.md` in the same session | "One file changes. That's why we planned the data layer." |
-| 18 (~31) | Claude, terminal 2, browser | Read the proposed policies out loud, approve. When done: `npm run dev`, add a project + task + tag, tick it, **refresh**. Then show the rows in the Table Editor | "Yesterday a refresh wiped it. Today it's in PostgreSQL." |
+| 18 (~31) | Claude, terminal 2, browser | Read the proposed policies out loud, approve. When done: `npm run dev`, add a project + task + tag, tick it, **refresh**. Then show the rows in the Table Editor | "In Lecture 1 a refresh wiped it. Now it's in PostgreSQL." |
 
 Claude asks permission before it edits files or calls a tool. For file edits, pick **"Yes, allow all edits during this session"**. For **Supabase MCP calls, approve each one** and read it out loud: that's the lesson.
 

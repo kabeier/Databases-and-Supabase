@@ -226,6 +226,7 @@ WHERE is_complete = false;
     </div>
   </div>
   <aside class="notes">
+    <p><b>This is part 1 of the drawing: draw only projects and tasks now</b>, with their columns and types, no lines. The table on the slide is the tasks table, for the class to read while you type. tags, task_tags and all the relationship lines come at slide 16, after the relationships section.</p>
     <p><b>** LIVE, about 6 minutes. **</b> Switch to the DrawSQL tab. Stories are in <code>demo-kit/user_stories.md</code>; read them out loud as you go.</p>
     <ul>
       <li>Click the <b>Add table</b> icon (top-left toolbar), click the canvas. Rename it in the left panel (pencil icon).</li>
@@ -292,7 +293,7 @@ WHERE is_complete = false;
         <li>Drag from <b>tasks.project_id</b> to <b>projects.id</b></li>
         <li>Add <b>tags</b> and the junction table <b>task_tags</b></li>
         <li>Connect <b>task_tags</b> to tasks and to tags</li>
-        <li>Screenshot it. That's tomorrow's input.</li>
+        <li>Screenshot it. We'll use it later.</li>
       </ol>
     </div>
     <div class="card green">
@@ -319,7 +320,7 @@ WHERE is_complete = false;
   <div class="src">demo-kit/task-manager-erd.png</div>
   <aside class="notes">
     <p>This is the backup screenshot, the same diagram you just drew. Walk it once more: "Every line is a foreign key. The crow's foot (the three-pronged end) is the many side."</p>
-    <p>"Tomorrow we hand Claude this picture plus the user stories, and it builds the real database in Supabase, one table at a time, while we check its work. Then we connect Ticked to it, and refresh stops deleting everything."</p>
+    <p>"Next lecture we hand Claude this picture plus the user stories, and it builds the real database in Supabase, one table at a time, while we check its work. Then we connect Ticked to it, and refresh stops deleting everything."</p>
   </aside>
 </section>
 
@@ -336,9 +337,9 @@ WHERE is_complete = false;
   <div class="cols">
     <div>
       <ol style="list-style:none;padding-left:0">
-        <li><b>Priority 1, your own app:</b> map your database. Nouns → tables, details → columns, pick types, decide relationships, draw it in DrawSQL</li>
-        <li><b>Priority 2, FreeCodeCamp:</b> 50 steps of the Python certification</li>
-        <li><b>Priority 3, Netflix Clone II:</b> think through what data it needs. A users table is fine; no login yet.</li>
+        <li><b>Priority 1, Netflix Clone II:</b> think through what data it needs. A users table is fine; no login yet.</li>
+        <li><b>Priority 2, your own app:</b> map your database. Nouns → tables, details → columns, pick types, decide relationships, draw it in DrawSQL</li>
+        <li><b>Priority 3, FreeCodeCamp:</b> 50 steps of the Python certification</li>
       </ol>
     </div>
     <div class="card green">
@@ -352,7 +353,7 @@ WHERE is_complete = false;
     </div>
   </div>
   <aside class="notes">
-    <p>Say the order out loud: your own app first, then the certification, then the Netflix clone.</p>
+    <p>Say the order out loud: the Netflix clone first, then your own app, then the certification.</p>
     <p>Tell them: <code>drawsql.app/draw</code> works with no account, but saves only in that browser. A free account keeps public diagrams with up to 15 tables. Export is a paid feature, so a screenshot is the plan.</p>
   </aside>
 </section>

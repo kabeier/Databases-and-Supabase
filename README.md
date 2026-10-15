@@ -23,7 +23,7 @@ Each deck is a single HTML file. Open it, press **P** for presenter notes in a s
 
 | ~min | Segment |
 |---|---|
-| 0–3 | Open: yesterday's diagram |
+| 0–3 | Open: the diagram from Lecture 1 |
 | 3–7 | PostgreSQL, Supabase, why Supabase |
 | 7–11 | Live: create the project, tour the dashboard |
 | 11–16 | Live: Supabase MCP (project scope, in Ticked's folder), postgresql-table-design skill |

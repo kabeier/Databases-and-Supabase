@@ -111,7 +111,7 @@ WHERE is_complete = false;
   <aside class="notes">
     <p>"You already wrote user stories for your app. They're the start of your database too." Read the stories, point at the nouns in caps: PROJECT, TASK, TAG. Each becomes a table.</p>
     <p>Then the details: a task has a title, a due date, a done flag, a created time. Those become columns.</p>
-    <p>Point at the grey box: "user" is a noun too, but Ticked has no logins yet, so everyone shares the same data. When accounts arrive in a future lecture, a users table appears. "A table exists because the app needs to remember something about it."</p>
+    <p>USER is a noun too: it becomes a <b>users</b> table. Ticked has no login screen yet (that's a future lecture), but the database is ready for it: every project and task will know who it belongs to.</p>
     <p>"No computer needed. Careful reading and clear thinking."</p>
   </aside>
 </section>
@@ -214,6 +214,7 @@ WHERE is_complete = false;
       <tr><td>due_date</td><td>DATE</td><td>optional</td></tr>
       <tr><td>created_at</td><td>TIMESTAMPTZ</td><td>set on insert</td></tr>
       <tr><td>project_id</td><td>UUID</td><td>points at projects.id</td></tr>
+      <tr><td>user_id</td><td>UUID</td><td>points at users.id</td></tr>
     </table>
     <div class="card blue">
       <h3>drawsql.app/draw</h3>
@@ -221,22 +222,23 @@ WHERE is_complete = false;
         <li>No account needed</li>
         <li>Pick <b>PostgreSQL</b></li>
         <li>Add table, then add columns and types</li>
-        <li>Tables: <b>projects</b>, <b>tasks</b></li>
+        <li>Tables: <b>users</b>, <b>projects</b>, <b>tasks</b></li>
       </ul>
     </div>
   </div>
   <aside class="notes">
-    <p><b>This is part 1 of the drawing: draw only projects and tasks now</b>, with their columns and types, no lines. The table on the slide is the tasks table, for the class to read while you type. tags, task_tags and all the relationship lines come at slide 16, after the relationships section.</p>
+    <p><b>This is part 1 of the drawing: draw users, projects and tasks now</b>, with their columns and types, no lines. The table on the slide is the tasks table, for the class to read while you type. tags, task_tags and all the relationship lines come at slide 16, after the relationships section.</p>
     <p><b>** LIVE, about 6 minutes. **</b> Switch to the DrawSQL tab. Stories are in <code>demo-kit/user_stories.md</code>; read them out loud as you go.</p>
     <ul>
       <li>Click the <b>Add table</b> icon (top-left toolbar), click the canvas. Rename it in the left panel (pencil icon).</li>
       <li>In the left panel: column name, type, <b>N</b> = nullable, key icon = primary key. <b>Add Column</b> for more.</li>
-      <li><b>projects</b>: id uuid (PK), name varchar(255), description text (nullable), created_at timestamptz</li>
-      <li><b>tasks</b>: the table on this slide. Mark due_date and project_id nullable (<b>N</b>): a task doesn't need a due date or a project.</li>
+      <li><b>users</b>: id uuid (PK), name varchar(100), email varchar(255), created_at timestamptz</li>
+      <li><b>projects</b>: id uuid (PK), name varchar(255), description text (nullable), user_id uuid, created_at timestamptz</li>
+      <li><b>tasks</b>: the table on this slide. Mark due_date and project_id nullable (<b>N</b>): a task doesn't need a due date or a project. user_id is required: every task has an owner.</li>
     </ul>
     <p>Ask the class for each type before you type it. Don't draw lines yet; that's after relationships.</p>
-    <p>If someone asks "where are the users?": no logins yet, so no users table. It shows up when accounts do.</p>
-    <p>Running long? Use <b>Import SQL</b> with <code>demo-kit/schema.sql</code> and talk through what appears.</p>
+    <p>If someone asks "where do I log in?": the database is ready for users now; the login screen comes in a future lecture.</p>
+    <p>Running long? <b>File → Import</b>, paste the <code>create table</code> part of <code>demo-kit/schema.sql</code> (it replaces the canvas, lines included), and talk through what appears.</p>
   </aside>
 </section>
 
@@ -290,7 +292,8 @@ WHERE is_complete = false;
   <div class="cols">
     <div>
       <ol>
-        <li>Drag from <b>tasks.project_id</b> to <b>projects.id</b></li>
+        <li><b>projects.user_id</b> and <b>tasks.user_id</b> → users.id</li>
+        <li><b>tasks.project_id</b> → projects.id</li>
         <li>Add <b>tags</b> and the junction table <b>task_tags</b></li>
         <li>Connect <b>task_tags</b> to tasks and to tags</li>
         <li>Screenshot it. We'll use it later.</li>
@@ -303,7 +306,7 @@ WHERE is_complete = false;
     </div>
   </div>
   <aside class="notes">
-    <p><b>** LIVE, about 3 minutes. **</b></p>
+    <p><b>** LIVE, about 3–4 minutes. **</b> Five lines in total: three now, two for task_tags.</p>
     <ul>
       <li>Hover a column: dots appear on its left and right edges. Drag from the FK column's dot onto the PK column it points at. A small popup lets you pick <b>1:1</b>, <b>1:N</b> or <b>N:1</b>; choose the one that reads right (many tasks to one project).</li>
       <li>Add <b>tags</b>: id uuid (PK), name varchar(50).</li>
@@ -316,11 +319,11 @@ WHERE is_complete = false;
 </section>
 
 <section class="slide diagram" data-seg="Wrap up" data-at="39">
-  <img src="../diagrams/DB1-04-task-manager-erd.png" alt="DrawSQL diagram of the Task Manager: projects, tasks, task_tags and tags, connected by foreign keys">
+  <img src="../diagrams/DB1-04-task-manager-erd.png" alt="DrawSQL diagram of the Task Manager: users, projects, tasks, task_tags and tags, connected by foreign keys">
   <div class="src">demo-kit/task-manager-erd.png</div>
   <aside class="notes">
     <p>This is the backup screenshot, the same diagram you just drew. Walk it once more: "Every line is a foreign key. The crow's foot (the three-pronged end) is the many side."</p>
-    <p>"Next lecture we hand Claude this picture plus the user stories, and it builds the real database in Supabase, one table at a time, while we check its work. Connecting Ticked to it comes later, once we build the API."</p>
+    <p>"Next lecture we hand Claude this picture plus the user stories, and it builds the real database in Supabase, one table at a time, while we check its work. Connecting Ticked to it, through an API, comes in a future lecture."</p>
   </aside>
 </section>
 

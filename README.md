@@ -48,10 +48,14 @@ Each deck is a single HTML file. Open it, press **P** for presenter notes in a s
 
 ## Notes on choices
 
-- **The running example is Ticked, a task manager** (projects, tasks, tags, task_tags), presented as the app from the SPA lectures in place of Liftlog. All its data code is in one file (`src/data/db.js`), ready for the API.
-- **The app and the database are not connected in these lectures.** That needs an API (the back-end), in a future lecture. The slides say so clearly.
+- **The running example is Ticked, a task manager**, presented as the app from the SPA lectures in place of Liftlog. Its database has five tables: users, projects, tasks, tags and task_tags. All the app's data code is in one file (`src/data/db.js`).
+- **The app and the database are not connected in these lectures.** Connecting them through an API is a future lecture. The slides say so clearly.
+- **Aligned with the next lectures:**
+  - **Users table:** the full-stack lecture's Postman exercise uses `/users` and `/tasks`. The authentication lecture rebuilds `users` around Supabase logins, with rules on `user_id`.
+  - **Folders:** the database work lives in `ticked/supabase/`, next to `ticked/front-end/`, matching the full-stack lecture's layout.
+  - **RLS:** see `demo-kit/RUNBOOK.md` → "Heads-up for the next lectures".
 - **No users table yet.** There are no logins, so everyone shares the data. Accounts and "only your own tasks" rules come in a future lecture.
-- **RLS:** `schema.sql` turns Row Level Security on (Supabase's advice). Its rules come with the API and logins later; the dashboard can still see everything.
+- **RLS:** `schema.sql` turns Row Level Security on (Supabase's advice). The rules come in future lectures; the dashboard can still see everything.
 - **The Noun Hunt uses a different app (Recipe Box)**, so students practice the method instead of copying the live demo.
 - **DrawSQL's free plan can't export** SQL or images (File → Export is locked; pricing lists export as paid). So students screenshot the diagram, Claude writes `schema.sql` from it, and they review that file before anything runs. That review is an extra pause-and-verify gate.
 - **The Supabase MCP uses `--scope project`**, the command from the dashboard's Connect menu, because it's tied to one database. Context7 stays `--scope user` from the SPA lecture.

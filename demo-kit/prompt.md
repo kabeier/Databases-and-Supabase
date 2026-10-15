@@ -1,4 +1,4 @@
-# The database prompt (paste into Claude Code from the app folder, ~/demos/task-manager)
+# The database prompt (paste into Claude Code from the database folder, ~/demos/ticked/supabase)
 
 Before you paste it, the folder should contain:
 - `user_stories.md`
@@ -8,7 +8,7 @@ Before you paste it, the folder should contain:
 
 ---
 
-I'm building a task management application where people create projects and tasks, and label tasks with tags. There are no logins yet, so everyone shares the same data. I have some resources I'd like you to look at and supervise:
+I'm building a task management application where people create projects and tasks, and label tasks with tags. There's no login screen yet; that comes later. I have some resources I'd like you to look at and supervise:
 
 Here is my DrawSQL schema diagram (a screenshot):
 @task-manager-erd.png

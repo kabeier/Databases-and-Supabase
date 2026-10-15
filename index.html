@@ -98,8 +98,8 @@
     <h4>2 · Create a Supabase project and a folder for it</h4>
     <ol class="steps">
       <li>At <a href="https://supabase.com/dashboard/sign-up" target="_blank" rel="noopener">supabase.com</a>, sign in with GitHub → <b>New project</b> → name, generated password (save it), nearest region, Free plan.</li>
-      <li>Work in your app's project folder, like we did with Ticked (or make a new folder just for the database). Put your diagram screenshot and a <code>user_stories.md</code> in it.
-        <div class="cmdwrap"><pre class="cmd"><code>cd ~/path/to/your-app</code></pre><button type="button" class="copy">Copy</button></div></li>
+      <li>Make a <code>supabase</code> folder <b>next to</b> your app's front-end folder, like <code>ticked/front-end</code> and <code>ticked/supabase</code> in class. Put your diagram screenshot and a <code>user_stories.md</code> in it.
+        <div class="cmdwrap"><pre class="cmd"><code>mkdir -p ~/my-app/supabase && cd ~/my-app/supabase</code></pre><button type="button" class="copy">Copy</button></div></li>
     </ol>
 
     <h4>3 · Connect Claude Code with the Supabase MCP</h4>
@@ -133,6 +133,8 @@ curl -fsSL $R/references/details.md -o $S/references/details.md</code></pre><but
     <ol class="steps">
       <li>Start from <a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/prompt.md" target="_blank" rel="noopener">the class prompt</a>. Change the first sentence to describe your app and the file names to yours.</li>
       <li>Review <code>schema.sql</code> before you approve it. Row Level Security should be on for every table. After each table, check the <b>Table Editor</b>. When it's done, the <b>Schema Visualizer</b> should match your diagram.</li>
+      <li>Add the Supabase sub-agent to the same folder (we use it when we connect the front-end in a future lecture):
+        <div class="cmdwrap"><pre class="cmd"><code>mkdir -p .claude/agents && curl -fsSL https://raw.githubusercontent.com/kabeier/Databases-and-Supabase/main/demo-kit/.claude/agents/supabase-agent.md -o .claude/agents/supabase-agent.md</code></pre><button type="button" class="copy">Copy</button></div></li>
     </ol>
   </section>
 

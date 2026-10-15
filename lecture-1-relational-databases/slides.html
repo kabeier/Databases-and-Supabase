@@ -109,7 +109,8 @@ WHERE is_complete = false;
   <img src="../diagrams/DB1-02-nouns-to-tables.png" alt="User stories with the nouns in capitals; each noun becomes a table and its details become columns">
   <div class="src">diagrams/DB1-02-nouns-to-tables.tldr</div>
   <aside class="notes">
-    <p>"You already wrote user stories for your app. They're the start of your database too." Read the stories, point at the nouns in caps: PROJECT, TASK, TAG. Each becomes a table.</p>
+    <p>"You already wrote user stories for your app. They're the start of your database too." Read the stories, point at the nouns in caps: USER, PROJECT, TASK, TAG. Each becomes a table.</p>
+    <p><b>Show where they came from (30 sec).</b> Open Ticked's <code>app_outline/pages/</code> (one <code>user_story.md</code> per page, from the SPA lectures) next to <code>demo-kit/user_stories.md</code>. "I went through the page stories and pulled out one list: just the things the app has to <i>remember</i>. One line each. I added one the pages didn't have: an account. That's <code>user_stories.md</code>, and it's your homework too."</p>
     <p>Then the details: a task has a title, a due date, a done flag, a created time. Those become columns.</p>
     <p>USER is a noun too: it becomes a <b>users</b> table. Ticked has no login screen yet (that's a future lecture), but the database is ready for it: every project and task will know who it belongs to.</p>
     <p>"No computer needed. Careful reading and clear thinking."</p>
@@ -223,6 +224,7 @@ WHERE is_complete = false;
         <li>Pick <b>PostgreSQL</b></li>
         <li>Add table, then add columns and types</li>
         <li>Tables: <b>users</b>, <b>projects</b>, <b>tasks</b></li>
+        <li>Reading from <code>user_stories.md</code></li>
       </ul>
     </div>
   </div>
@@ -349,7 +351,7 @@ WHERE is_complete = false;
       <h3>Bring to next lecture</h3>
       <ul class="small">
         <li>A screenshot of your DrawSQL diagram</li>
-        <li>Your user stories in a <code>user_stories.md</code> file</li>
+        <li><code>user_stories.md</code>: your page stories pulled into one list of what the app must remember</li>
         <li>Optional: a free <b>Supabase</b> account (sign in with GitHub)</li>
       </ul>
       <p class="small muted">Next time these go into a real Supabase database.</p>
@@ -357,6 +359,7 @@ WHERE is_complete = false;
   </div>
   <aside class="notes">
     <p>Say the order out loud: the Netflix clone first, then your own app, then the certification.</p>
+    <p><code>user_stories.md</code>: "Go through your <code>app_outline</code> page stories and journey, and write one line per thing your app has to remember: <i>As a user, I want to … so that …</i>. That list is where your nouns come from." Template and example: the class site, Homework setup step 1.</p>
     <p>Tell them: <code>drawsql.app/draw</code> works with no account, but saves only in that browser. A free account keeps public diagrams with up to 15 tables. Export is a paid feature, so a screenshot is the plan.</p>
   </aside>
 </section>

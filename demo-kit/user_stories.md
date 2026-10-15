@@ -1,5 +1,7 @@
 # Task Manager: user stories
 
+Pulled from Ticked's `app_outline/` (the journey and each page's `user_story.md`) into one list: one line per thing the app has to *remember*. Story 1 isn't on any page; it's added so the database knows who owns what.
+
 There's no login screen yet: that comes in a future lecture. The database is ready for it.
 
 1. As a user, I want an account with my name and email so that the app knows which projects and tasks are mine.

@@ -49,7 +49,7 @@ Nothing to install. Before class:
 
 1. Open Ticked: `https://kabeier.github.io/Databases-and-Supabase/task-manager/`, or `npm run dev` in `~/demos/ticked`.
 2. Open `https://drawsql.app/draw`, pick **PostgreSQL**, then **Start with a blank canvas**.
-3. Have `user_stories.md` open to read from, and `task-manager-erd.png` as the backup picture.
+3. Have `user_stories.md` open to read from, and `task-manager-erd.png` as the backup picture. Also open Ticked's `app_outline/pages/` for slide 7: you show that `user_stories.md` is the page stories pulled into one list of what the app must remember, plus an account story.
 4. **Running long at slide 12?** Use **File → Import** and paste the `create table` part of `schema.sql`. It creates all five tables with their lines (it replaces the canvas).
 
 **Slide 3, live:** add a task, tick another one, refresh. Both changes are gone.

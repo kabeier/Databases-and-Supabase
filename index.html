@@ -87,7 +87,25 @@
 
   <h3>Homework setup: your database, step by step</h3>
   <section class="install">
-    <h4>1 · Draw your database</h4>
+    <h4>1 · Write your user_stories.md</h4>
+    <ol class="steps">
+      <li>Open your app's <code>app_outline/</code> from the SPA lectures: <code>user_journey.md</code> and each page's <code>user_story.md</code>.</li>
+      <li>Make a new file, <code>user_stories.md</code>, with <b>one line per thing your app has to remember</b>, in the form <i>As a user, I want to … so that …</i>. Skip things that are only about the screen (buttons, colors, navigation).</li>
+      <li>Add any the pages don't say out loud, like having an account. Keep it short: 5–10 lines is plenty.</li>
+    </ol>
+    <details>
+      <summary>Example: Ticked's user_stories.md</summary>
+      <div class="cmdwrap"><pre class="cmd" style="white-space:pre-wrap"><code>1. As a user, I want an account with my name and email so that the app knows which projects and tasks are mine.
+2. As a user, I want to create projects with a name and a description so that I can organize my work.
+3. As a user, I want to create tasks with a title so that I can track what I need to do.
+4. As a user, I want to assign a task to a project (or leave it on its own) so that I can keep related work together.
+5. As a user, I want to give a task a due date so that I know what's coming up.
+6. As a user, I want to mark tasks as complete so that I know what I've finished.
+7. As a user, I want to label tasks with tags like "school" or "urgent" (a task can have several) so that I can filter my list.
+8. As a user, I want to see when each task was created so that I can spot old ones.</code></pre></div>
+    </details>
+
+    <h4>2 · Draw your database</h4>
     <ol class="steps">
       <li>Open <a href="https://drawsql.app/draw" target="_blank" rel="noopener">drawsql.app/draw</a>, choose <b>PostgreSQL</b>, then <b>Start with a blank canvas</b>.</li>
       <li>Add a table per noun in your user stories, a column per detail, and a type for every column. Drag from a foreign key column's dot onto the column it points at to draw a relationship.</li>
@@ -95,7 +113,7 @@
       <li>Without an account, the diagram is saved only in that browser. A free account keeps it (public diagrams, up to 15 tables).</li>
     </ol>
 
-    <h4>2 · Create a Supabase project and a folder for it</h4>
+    <h4>3 · Create a Supabase project and a folder for it</h4>
     <ol class="steps">
       <li>At <a href="https://supabase.com/dashboard/sign-up" target="_blank" rel="noopener">supabase.com</a>, sign in with GitHub. The first time, Supabase asks you to create an <b>organization</b>: your name, type Personal, Free plan.</li>
       <li><b>New project</b>, and fill in the form top to bottom:
@@ -112,7 +130,7 @@ mkdir supabase
 cd supabase</code></pre><button type="button" class="copy">Copy</button></div></li>
     </ol>
 
-    <h4>3 · Connect Claude Code with the Supabase MCP</h4>
+    <h4>4 · Connect Claude Code with the Supabase MCP</h4>
     <ol class="steps">
       <li>In your Supabase project, click <b>Connect</b> in the top bar → <b>MCP</b> → <b>Claude Code</b>, and copy the command. It looks like this (yours has your own <code>project_ref</code>):
         <div class="cmdwrap"><pre class="cmd"><code>claude mcp add --scope project --transport http supabase "https://mcp.supabase.com/mcp?project_ref=YOUR_REF"</code></pre></div></li>
@@ -121,7 +139,7 @@ cd supabase</code></pre><button type="button" class="copy">Copy</button></div></
       <li>Type <code>/mcp</code> → <b>supabase</b> → <b>Authenticate</b>. Approve in the browser tab that opens, then come back.</li>
     </ol>
 
-    <h4>4 · Add the database design skill (and Context7)</h4>
+    <h4>5 · Add the database design skill (and Context7)</h4>
     <ol class="steps">
       <li>In a terminal in the same folder:
         <div class="cmdwrap"><pre class="cmd"><code>curl -fsSL https://kabeier.github.io/Databases-and-Supabase/demo-kit/setup-db-skill.sh | bash</code></pre><button type="button" class="copy">Copy</button></div>
@@ -139,7 +157,7 @@ curl -fsSL $R/SKILL.md -o $S/SKILL.md
 curl -fsSL $R/references/details.md -o $S/references/details.md</code></pre><button type="button" class="copy">Copy</button></div>
     </details>
 
-    <h4>5 · Paste the prompt, then verify every table</h4>
+    <h4>6 · Paste the prompt, then verify every table</h4>
     <ol class="steps">
       <li>Start from <a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/prompt.md" target="_blank" rel="noopener">the class prompt</a>. Change the first sentence to describe your app and the file names to yours.</li>
       <li>Review <code>schema.sql</code> before you approve it. Row Level Security should be on for every table. After each table, check the <b>Table Editor</b>. When it's done, the <b>Schema Visualizer</b> should match your diagram.</li>
@@ -152,7 +170,7 @@ curl -fsSL $R/references/details.md -o $S/references/details.md</code></pre><but
     <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/prompt.md" target="_blank" rel="noopener"><b>The database prompt</b><span>What we pasted into Claude Code.</span></a></li>
     <li><a href="https://github.com/kabeier/Databases-and-Supabase/tree/main/demo-kit/app_outline" target="_blank" rel="noopener"><b>Ticked's app_outline</b><span>The wireframes, user stories and style guide Ticked was built from.</span></a></li>
     <li><a href="https://github.com/kabeier/Databases-and-Supabase/tree/main/demo-kit/backup-task-manager" target="_blank" rel="noopener"><b>Ticked's source code</b><span>React + Vite + React Router, with its app_outline, CLAUDE.md, skills and front-end agent.</span></a></li>
-    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/user_stories.md" target="_blank" rel="noopener"><b>user_stories.md</b><span>The Task Manager stories from the demo.</span></a></li>
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/user_stories.md" target="_blank" rel="noopener"><b>user_stories.md</b><span>Ticked's page stories pulled into one list of what the database must remember.</span></a></li>
     <li><a href="demo-kit/task-manager-erd.png" target="_blank" rel="noopener"><b>task-manager-erd.png</b><span>The demo's DrawSQL diagram.</span></a></li>
     <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/schema.sql" target="_blank" rel="noopener"><b>schema.sql</b><span>The finished Task Manager schema, for comparison.</span></a></li>
     <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/.claude/agents/supabase-agent.md" target="_blank" rel="noopener"><b>supabase-agent.md</b><span>The reusable Supabase sub-agent.</span></a></li>

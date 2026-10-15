@@ -83,24 +83,28 @@
 <!-- ============ LIVE SETUP (7–16) ============ -->
 <section class="slide" data-seg="Live: create a project" data-at="7">
   <h2>Live: create a Supabase project</h2>
-  <div class="cols wide-left">
-    <ol>
-      <li>supabase.com → sign in with <b>GitHub</b></li>
-      <li>First time? Create an <b>organization</b>: your name, Personal, Free</li>
-      <li><b>New project</b> in that org, name it <code>task-manager</code></li>
-      <li>Generate a strong database password and save it</li>
-      <li>Pick the region closest to you → <b>Create new project</b></li>
-    </ol>
-    <div class="card green">
-      <h3>While it spins up</h3>
-      <p class="small">60–90 seconds. That's Supabase starting a real PostgreSQL server just for you.</p>
-    </div>
-  </div>
+  <table class="dbt small">
+    <tr><th>Field</th><th>What to do</th></tr>
+    <tr><td>Organization</td><td>Yours. First sign-in? Create one: your name, Personal, Free</td></tr>
+    <tr><td>GitHub (optional)</td><td>Leave it empty</td></tr>
+    <tr><td>Project name</td><td><code>task-manager</code></td></tr>
+    <tr><td>Database password</td><td><b>Generate a password → Copy → save it now.</b> It's never shown again</td></tr>
+    <tr><td>Region</td><td>The one closest to you (Americas)</td></tr>
+    <tr><td>Enable Data API</td><td>✓ keep on: the auto-generated API (future lecture)</td></tr>
+    <tr><td>Automatically expose new tables</td><td>✓ keep on</td></tr>
+    <tr><td class="pk">Enable automatic RLS</td><td class="pk"><b>✓ turn this ON</b></td></tr>
+    <tr><td>Advanced configuration</td><td>Leave it → <b>Create new project</b> (60–90 seconds)</td></tr>
+  </table>
   <aside class="notes">
-    <p><b>** LIVE, browser. **</b> An <b>organization</b> is the folder your projects live in (and where billing and teammates go). Supabase asks for one the first time you sign in: a name, a type (Personal), and the Free plan. You already have one, so point at the Organization dropdown on the New project form and say "on your first sign-in, you'll make this first."</p>
-    <p>A project is one isolated PostgreSQL database with its own URL, keys and settings. An organization can hold several.</p>
-    <p>Password: click Generate, copy it into your password manager. "You won't need it today, but you will if you ever connect a database client directly."</p>
-    <p>Region: US students, pick a US East or US West region.</p>
+    <p><b>** LIVE, browser. **</b> Go top to bottom through the form and say each choice out loud. Students will copy this exactly for homework.</p>
+    <ul>
+      <li><b>Organization</b>: the folder your projects live in (plus billing and teammates). Supabase asks for one on the first sign-in: name, type Personal, Free plan. You already have one; point at the dropdown.</li>
+      <li><b>GitHub</b>: leave it. That feature deploys database changes from SQL files in a repo; we build with Claude through the MCP instead. Your code still goes to GitHub with git as usual.</li>
+      <li><b>Database password</b>: click Generate, Copy, paste into a password manager (or a note outside your project) <i>before</i> you click Create. Supabase never shows it again, but you can reset it in Project Settings → Database. We don't need it this week: Claude logs in through the MCP, and the API uses keys. Never put it in your repo or paste it into Claude.</li>
+      <li><b>Enable Data API</b>: the auto-generated API from the last diagram. Keep it on; a future lecture uses it.</li>
+      <li><b>Automatically expose new tables</b>: keep it on. The fine print recommends turning it off to control access by hand, but then the API can't see new tables until you grant access table by table. Row Level Security is our lock instead.</li>
+      <li><b>Enable automatic RLS</b>: turn it <b>on</b>. Every new table gets Row Level Security automatically, even if someone forgets. "With RLS on and no rules, the API returns nothing. The rules come in future lectures."</li>
+    </ul>
     <p>While it provisions, go to the next slide and talk through the dashboard sections.</p>
   </aside>
 </section>

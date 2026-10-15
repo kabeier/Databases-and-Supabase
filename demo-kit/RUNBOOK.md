@@ -92,7 +92,7 @@ One terminal in `~/demos/ticked`. Add a second tab when you install the skill.
 
 | Slide (~min) | Where | Do | Say |
 |---|---|---|---|
-| 7 (~7) | browser | Point at the **Organization** dropdown ("first sign-in: you create one: name, Personal, Free"). **New project** `task-manager`, generate a password, pick a region, Create | "A real PostgreSQL server, just for us, in about 90 seconds." |
+| 7 (~7) | browser | **New project** form, top to bottom: Organization (point at it: "first sign-in, you create one"), GitHub empty, name `task-manager`, **Generate → Copy → save the password**, Region closest, Security: keep **Enable Data API** ✓ and **Automatically expose new tables** ✓, turn **Enable automatic RLS** ✓ on, Advanced untouched → Create | "A real PostgreSQL server, just for us, in about 90 seconds." |
 | 8 (~9) | browser | Tour: Table Editor, SQL Editor, Database, then point at **Connect** | "This is where you check Claude's work." |
 | 9 (~11) | terminal 1 | `ls` (just `front-end/`), then `mkdir -p ~/demos/ticked/supabase && cd ~/demos/ticked/supabase`. Paste the command from **Connect → MCP → Claude Code**. Then `claude`, trust the folder, **Use this MCP server**, `/mcp` → supabase → **Authenticate** | "The database gets its own folder, next to the front-end. Project scope: this MCP belongs to this folder and this database." |
 | 10 (~14) | terminal 2 | `cd ~/demos/ticked/supabase` and the `setup-db-skill.sh` one-liner, then `/skills` in Claude | "A skill is a folder of rules." |

@@ -97,7 +97,15 @@
 
     <h4>2 · Create a Supabase project and a folder for it</h4>
     <ol class="steps">
-      <li>At <a href="https://supabase.com/dashboard/sign-up" target="_blank" rel="noopener">supabase.com</a>, sign in with GitHub. The first time, Supabase asks you to create an <b>organization</b>: your name, type Personal, Free plan. Then <b>New project</b> (in that organization) → name, generated password (save it), nearest region.</li>
+      <li>At <a href="https://supabase.com/dashboard/sign-up" target="_blank" rel="noopener">supabase.com</a>, sign in with GitHub. The first time, Supabase asks you to create an <b>organization</b>: your name, type Personal, Free plan.</li>
+      <li><b>New project</b>, and fill in the form top to bottom:
+        <ul>
+          <li><b>Organization:</b> yours. <b>GitHub (optional):</b> leave empty. <b>Project name:</b> your app's name.</li>
+          <li><b>Database password:</b> click <i>Generate a password</i>, then <i>Copy</i>, and save it in a password manager <b>before</b> you continue. Supabase never shows it again (you can reset it later in Project Settings → Database). Never put it in your repo.</li>
+          <li><b>Region:</b> the one closest to you.</li>
+          <li><b>Security:</b> keep <i>Enable Data API</i> ✓ and <i>Automatically expose new tables</i> ✓, and turn <b><i>Enable automatic RLS</i> ✓ on</b>.</li>
+          <li>Leave <i>Advanced configuration</i> alone → <b>Create new project</b>.</li>
+        </ul></li>
       <li>Make a <code>supabase</code> folder <b>next to</b> your app's front-end folder, like <code>ticked/front-end</code> and <code>ticked/supabase</code> in class. Put your diagram screenshot and a <code>user_stories.md</code> in it.
         <div class="cmdwrap"><pre class="cmd"><code>mkdir -p ~/my-app/supabase && cd ~/my-app/supabase</code></pre><button type="button" class="copy">Copy</button></div></li>
     </ol>

@@ -67,6 +67,7 @@
       <p>Tables, columns, types and relationships, drawn in DrawSQL.</p>
       <a class="slides" href="lecture-1-relational-databases/slides.html" target="_blank" rel="noopener"><b>Open the slides</b>Arrow keys to move, F for fullscreen</a>
       <ol>
+        <li><a href="task-manager/" target="_blank" rel="noopener"><b>Ticked, the Task Manager</b><span>The demo app. Add a task, refresh, and watch it disappear.</span></a></li>
         <li><a href="lecture-1-relational-databases/activity-noun-hunt/" target="_blank" rel="noopener"><b>Activity: Noun Hunt</b><span>Recipe Box user stories. Which words become tables, which become columns?</span></a></li>
         <li><a href="lecture-1-relational-databases/activity-relationship-sorter/" target="_blank" rel="noopener"><b>Activity: Relationship Sorter</b><span>Two tables at a time. One-to-one, many-to-one or many-to-many?</span></a></li>
         <li><a href="https://drawsql.app/draw" target="_blank" rel="noopener"><b>DrawSQL</b><span>Draw your diagram. Pick PostgreSQL. No account needed to start.</span></a></li>
@@ -75,7 +76,7 @@
     <section>
       <div class="num">2</div>
       <h2>Databases on the Cloud</h2>
-      <p>Supabase + Claude Code, one table at a time.</p>
+      <p>Supabase + Claude Code, one table at a time. Then Ticked remembers.</p>
       <a class="slides" href="lecture-2-databases-on-the-cloud/slides.html" target="_blank" rel="noopener"><b>Open the slides</b>Arrow keys to move, F for fullscreen</a>
       <ol>
         <li><a href="lecture-2-databases-on-the-cloud/activity-approve-or-push-back/" target="_blank" rel="noopener"><b>Activity: Approve or Push Back?</b><span>Things Claude might say while building your database. Would you let it?</span></a></li>
@@ -131,15 +132,25 @@ curl -fsSL $R/references/details.md -o $S/references/details.md</code></pre><but
     <h4>5 · Paste the prompt, then verify every table</h4>
     <ol class="steps">
       <li>Start from <a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/prompt.md" target="_blank" rel="noopener">the class prompt</a>. Change the first sentence to describe your app and the file names to yours.</li>
-      <li>Review <code>schema.sql</code> before you approve it. After each table, check the <b>Table Editor</b>. When it's done, the <b>Schema Visualizer</b> should match your diagram.</li>
+      <li>Review <code>schema.sql</code> before you approve it. Row Level Security should be on for every table. After each table, check the <b>Table Editor</b>. When it's done, the <b>Schema Visualizer</b> should match your diagram.</li>
+    </ol>
+
+    <h4>Stretch · Connect your app</h4>
+    <ol class="steps">
+      <li>Run Claude Code from your <b>app's</b> folder (add the Supabase MCP there), and adapt <a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/connect-prompt.md" target="_blank" rel="noopener">prompt 2</a>. If your app's data code is spread across many files, first ask Claude to gather it into one data file, and check the app still works.</li>
+      <li>Read every policy Claude proposes before you approve it. Only the <b>publishable</b> (anon) key goes in <code>.env.local</code>, never the secret key.</li>
     </ol>
   </section>
 
   <ol class="kit">
-    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/prompt.md" target="_blank" rel="noopener"><b>The database prompt</b><span>What we pasted into Claude Code.</span></a></li>
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/prompt.md" target="_blank" rel="noopener"><b>Prompt 1: build the tables</b><span>What we pasted into Claude Code.</span></a></li>
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/connect-prompt.md" target="_blank" rel="noopener"><b>Prompt 2: connect the app</b><span>Swaps Ticked's in-memory data for Supabase.</span></a></li>
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/tree/main/demo-kit/app_outline" target="_blank" rel="noopener"><b>Ticked's app_outline</b><span>The wireframes, user stories and style guide Ticked was built from.</span></a></li>
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/tree/main/demo-kit/backup-task-manager" target="_blank" rel="noopener"><b>Ticked's source code</b><span>React + Vite + React Router. All data code is in src/data/db.js.</span></a></li>
     <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/user_stories.md" target="_blank" rel="noopener"><b>user_stories.md</b><span>The Task Manager stories from the demo.</span></a></li>
     <li><a href="demo-kit/task-manager-erd.png" target="_blank" rel="noopener"><b>task-manager-erd.png</b><span>The demo's DrawSQL diagram.</span></a></li>
     <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/schema.sql" target="_blank" rel="noopener"><b>schema.sql</b><span>The finished Task Manager schema, for comparison.</span></a></li>
+    <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/dev-policies.sql" target="_blank" rel="noopener"><b>dev-policies.sql</b><span>The class's dev-only RLS policies, with what each one means.</span></a></li>
     <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/.claude/agents/supabase-agent.md" target="_blank" rel="noopener"><b>supabase-agent.md</b><span>The reusable Supabase sub-agent.</span></a></li>
     <li><a href="https://github.com/kabeier/Databases-and-Supabase/blob/main/demo-kit/setup-db-skill.sh" target="_blank" rel="noopener"><b>setup-db-skill.sh</b><span>Installs the postgresql-table-design skill.</span></a></li>
   </ol>
@@ -157,7 +168,8 @@ curl -fsSL $R/references/details.md -o $S/references/details.md</code></pre><but
     ['DB1-01-library', 'A database is a library', true], ['DB1-02-nouns-to-tables', 'Nouns become tables', true],
     ['DB1-03-relationships', 'Three kinds of relationships', true], ['DB1-04-task-manager-erd', 'Task Manager ERD (DrawSQL)', false],
     ['DB2-01-where-data-lives', 'Where your data lives', true], ['DB2-02-supabase', 'What Supabase gives you', true],
-    ['DB2-03-pause-and-verify', 'Pause and verify', true],
+    ['DB2-03-pause-and-verify', 'Pause and verify', true], ['DB2-04-rls-gate', 'Row Level Security', true],
+    ['TM-app', 'Ticked: journey + wireframes', true],
   ]
   document.getElementById('gallery').innerHTML = DIAGRAMS.map(([f, t, tldr]) => `
     <figure><a href="diagrams/${f}.png" target="_blank" rel="noopener"><img src="diagrams/${f}.png" alt="${t}" loading="lazy"></a>

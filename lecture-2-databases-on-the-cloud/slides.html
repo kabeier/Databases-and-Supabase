@@ -13,9 +13,9 @@
 <section class="slide title" data-seg="Open" data-at="0">
   <div class="kicker">Building Applications · Relational Databases · Part 2 of 2</div>
   <h1>Databases on the cloud: Supabase + Claude Code</h1>
-  <p class="sub">Yesterday you drew the database. Today Claude builds it in the cloud, and you check every step.</p>
+  <p class="sub">Yesterday you drew the database. Today Claude builds it in the cloud, you check every step, and Ticked stops forgetting.</p>
   <aside class="notes">
-    <p><b>Before class</b> (see demo-kit/RUNBOOK.md): logged in to supabase.com in your browser, with <b>no project created yet</b> (you create it live). <code>~/db-kit</code> holds the demo kit. Context7 is still installed from the SPA lecture (<code>claude mcp list</code>). One terminal open in <code>~/demos</code>.</p>
+    <p><b>Before class</b> (see demo-kit/RUNBOOK.md): logged in to supabase.com in your browser, with <b>no project created yet</b> (you create it live). <code>~/db-kit</code> holds the demo kit. <code>~/demos/task-manager</code> holds a fresh copy of Ticked with <code>npm install</code> done. Context7 is still installed from the SPA lecture (<code>claude mcp list</code>). One terminal open in <code>~/demos/task-manager</code>.</p>
     <p>Tabs ready: Supabase dashboard, the Approve or Push Back page. Press <b>T</b> to start the clock.</p>
   </aside>
 </section>
@@ -27,7 +27,7 @@
     <li>Create a Supabase project and tour the dashboard, live</li>
     <li>Connect Claude Code to it with the Supabase MCP</li>
     <li>Hand Claude the stories and the diagram, and build the tables one at a time</li>
-    <li>Check every change yourself in the dashboard</li>
+    <li>Plug Ticked into the database: add a task, refresh, it's still there</li>
   </ul>
   <aside class="notes">
     <p>"The goal isn't to become a database administrator. It's to know where your data lives, how it's organized, and how to supervise Claude while it builds it."</p>
@@ -35,10 +35,10 @@
 </section>
 
 <section class="slide diagram" data-seg="Open" data-at="2">
-  <img src="../diagrams/DB1-04-task-manager-erd.png" alt="Yesterday's DrawSQL diagram: users, projects, tasks, task_tags and tags">
+  <img src="../diagrams/DB1-04-task-manager-erd.png" alt="Yesterday's DrawSQL diagram: projects, tasks, task_tags and tags">
   <div class="src">demo-kit/task-manager-erd.png</div>
   <aside class="notes">
-    <p>"This is where we stopped yesterday: five tables, four relationships, on paper. Today it becomes a real database that remembers."</p>
+    <p>"This is where we stopped yesterday: four tables, three foreign keys, on paper. Today it becomes a real database that remembers."</p>
     <p>Quick check, chat: "Which table is the junction table, and why does it exist?" (task_tags: tasks and tags are many-to-many.)</p>
   </aside>
 </section>
@@ -54,7 +54,7 @@
   </aside>
 </section>
 
-<section class="slide diagram" data-seg="What is Supabase?" data-at="5">
+<section class="slide diagram" data-seg="What is Supabase?" data-at="4">
   <img src="../diagrams/DB2-02-supabase.png" alt="Supabase around PostgreSQL: table editor, SQL editor, auto-generated API, auth and storage, MCP server">
   <div class="src">diagrams/DB2-02-supabase.tldr</div>
   <aside class="notes">
@@ -63,7 +63,7 @@
   </aside>
 </section>
 
-<section class="slide" data-seg="What is Supabase?" data-at="7">
+<section class="slide" data-seg="What is Supabase?" data-at="6">
   <h2>Why Supabase?</h2>
   <div class="grid3">
     <div class="card blue"><h3>The dashboard</h3><p>See your tables and rows like a spreadsheet. Check Claude's work without writing SQL.</p></div>
@@ -79,8 +79,8 @@
   </aside>
 </section>
 
-<!-- ============ LIVE SETUP (9–21) ============ -->
-<section class="slide" data-seg="Live: create a project" data-at="9">
+<!-- ============ LIVE SETUP (7–16) ============ -->
+<section class="slide" data-seg="Live: create a project" data-at="7">
   <h2>Live: create a Supabase project</h2>
   <div class="cols wide-left">
     <ol>
@@ -103,7 +103,7 @@
   </aside>
 </section>
 
-<section class="slide" data-seg="Live: create a project" data-at="11">
+<section class="slide" data-seg="Live: create a project" data-at="9">
   <h2>The dashboard: where you check Claude's work</h2>
   <div class="grid3">
     <div class="card blue"><h3>Table Editor</h3><p>Every table and row, like a spreadsheet. <b>You'll live here today.</b></p></div>
@@ -119,9 +119,9 @@
   </aside>
 </section>
 
-<section class="slide" data-seg="Live: connect Claude" data-at="14">
+<section class="slide" data-seg="Live: connect Claude" data-at="11">
   <h2>Live: connect Claude Code with the Supabase MCP</h2>
-  <pre style="font-size:21px">mkdir -p ~/demos/task-manager-db && cd ~/demos/task-manager-db
+  <pre style="font-size:21px">cd ~/demos/task-manager        <span class="c"># Ticked, the app from Lecture 1</span>
 
 <span class="c"># Supabase → Connect → MCP → Claude Code → copy the command. It looks like:</span>
 claude mcp add --scope project --transport http supabase \
@@ -130,7 +130,7 @@ claude mcp add --scope project --transport http supabase \
 claude          <span class="c"># trust the folder → "Use this MCP server"</span>
 /mcp            <span class="c"># supabase → Authenticate → browser → back</span></pre>
   <aside class="notes">
-    <p><b>** LIVE, terminal. **</b> Make the folder first: "this folder is where all of the database context lives."</p>
+    <p><b>** LIVE, terminal. **</b> We connect from inside the app's folder: "this folder is where the app and all of its database context live, so Claude can see both."</p>
     <p>In Supabase: <b>Connect</b> (top bar) → <b>MCP</b> → choose <b>Claude Code</b> → copy the <code>claude mcp add</code> command. Paste it in the terminal, not inside Claude.</p>
     <p>Point out <code>--scope project</code>: "Last lecture we used <code>--scope user</code> for tools every project needs. This one is <b>project</b> scope: it's written to a <code>.mcp.json</code> file in this folder, because it's tied to this one database." <code>project_ref</code> is your project's id; the URL locks Claude to this project.</p>
     <p>Start <code>claude</code>, trust the folder, choose <b>Use this MCP server</b>. Then <code>/mcp</code> → supabase → <b>Authenticate</b>. A browser tab opens: approve, pick your organization. Back in the terminal it should show connected.</p>
@@ -139,7 +139,7 @@ claude          <span class="c"># trust the folder → "Use this MCP server"</sp
   </aside>
 </section>
 
-<section class="slide" data-seg="Live: connect Claude" data-at="18">
+<section class="slide" data-seg="Live: connect Claude" data-at="14">
   <h2>Live: add the database design skill</h2>
   <div class="cols wide-left">
     <pre style="font-size:20px"><span class="c"># in the same folder, in a terminal (not inside Claude)</span>
@@ -153,13 +153,13 @@ curl -fsSL https://kabeier.github.io/Databases-and-Supabase/demo-kit/setup-db-sk
     </div>
   </div>
   <aside class="notes">
-    <p><b>** LIVE. **</b> Open a second terminal tab in <code>~/demos/task-manager-db</code> (Claude keeps running in the first), paste the one-liner, watch for the ✓ line. In Claude, <code>/skills</code> should list <b>postgresql-table-design</b>. If it doesn't show, exit Claude and start it again.</p>
+    <p><b>** LIVE. **</b> Open a second terminal tab in <code>~/demos/task-manager</code> (Claude keeps running in the first), paste the one-liner, watch for the ✓ line. In Claude, <code>/skills</code> should list <b>postgresql-table-design</b>. If it doesn't show, exit Claude and start it again.</p>
     <p>"Same idea as the design skills last lecture: a folder of rules Claude reads when it's relevant."</p>
     <p>Heads up: this skill prefers <code>TEXT</code> over <code>VARCHAR</code> and sometimes BIGINT ids over UUID. If Claude suggests changes to your diagram, that's a design discussion. You decide.</p>
   </aside>
 </section>
 
-<section class="slide" data-seg="Build it" data-at="20">
+<section class="slide" data-seg="Build it" data-at="16">
   <h2>Don't come empty-handed: give Claude everything up front</h2>
   <div class="grid3">
     <div class="card blue"><h3>user_stories.md</h3><p>The intent. "A task can have several tags" tells Claude why task_tags exists.</p></div>
@@ -174,10 +174,11 @@ curl -fsSL https://kabeier.github.io/Databases-and-Supabase/demo-kit/setup-db-sk
   </aside>
 </section>
 
-<section class="slide" data-seg="Build it" data-at="21">
+<section class="slide" data-seg="Build it" data-at="17">
   <h2>The prompt</h2>
-  <pre style="font-size:18.5px">I'm building a task management application where users create projects and tasks, and label
-tasks with tags. I have some resources I'd like you to look at and supervise:
+  <pre style="font-size:17.5px">I'm building a task management application where people create projects and tasks, and label
+tasks with tags. There are no logins yet, so everyone shares the same data. I have some
+resources I'd like you to look at and supervise:
 
 Here is my DrawSQL schema diagram (a screenshot): @task-manager-erd.png
 Here are my user stories: @user_stories.md
@@ -187,7 +188,8 @@ Please:
 1. Use the `postgresql-table-design` skill and the Context7 MCP to update your context on the
    documentation for Supabase and PostgreSQL.
 2. Write the SQL schema for my diagram into `schema.sql`. Confirm it matches the diagram and the
-   user stories, and list anything you'd change. Don't change my design on your own. Then stop.
+   user stories, and list anything you'd change (including Row Level Security). Don't change my
+   design on your own. Then stop.
 3. After I approve, create the tables in my Supabase project <b>ONE AT A TIME</b>.
 4. After each table, pause and tell me what you did so I can verify it in the dashboard.
 
@@ -199,9 +201,9 @@ Is there any additional information you may need from me?</pre>
   </aside>
 </section>
 
-<section class="slide activity" data-seg="Activity: Approve or Push Back?" data-at="22">
+<section class="slide activity" data-seg="Activity: Approve or Push Back?" data-at="18">
   <h2>Activity: Approve or push back?</h2>
-  <div class="countdown" data-sec="360"></div>
+  <div class="countdown" data-sec="240"></div>
   <ol class="steps">
     <li>I paste the prompt. Claude starts reading docs.</li>
     <li>Meanwhile: things Claude might say while building a database</li>
@@ -211,12 +213,12 @@ Is there any additional information you may need from me?</pre>
   <p class="muted small" style="margin-top:24px">Page: activity-approve-or-push-back/</p>
   <aside class="notes">
     <p><b>** LIVE: paste the prompt into Claude first. **</b> When it asks to use the skill, Context7 or write <code>schema.sql</code>, approve. Pick <b>"Yes, allow all edits during this session"</b> for file edits. Keep approving <b>Supabase MCP calls one by one</b>: that's the point of today.</p>
-    <p>Then share the activity page. About 30 seconds a card; the first 8 are the core set. When Claude stops after writing schema.sql, end the activity.</p>
+    <p>Then share the activity page. About 30 seconds a card; do the first 8 (the core set). When Claude stops after writing schema.sql, end the activity. Cards 7 and 8 preview the connection step at the end of class.</p>
     <p>Answers are on the page (space to reveal) and in your Notes folder ("Database Activities - Answer Keys").</p>
   </aside>
 </section>
 
-<section class="slide diagram" data-seg="Pause and verify" data-at="28">
+<section class="slide diagram" data-seg="Pause and verify" data-at="22">
   <img src="../diagrams/DB2-03-pause-and-verify.png" alt="The loop: Claude writes schema.sql, you review it, Claude creates one table, you check the Table Editor, then continue to the next table">
   <div class="src">diagrams/DB2-03-pause-and-verify.tldr</div>
   <aside class="notes">
@@ -224,13 +226,13 @@ Is there any additional information you may need from me?</pre>
   </aside>
 </section>
 
-<section class="slide" data-seg="Pause and verify" data-at="29">
+<section class="slide" data-seg="Pause and verify" data-at="23">
   <h2>Live: review, build, verify</h2>
   <div class="cols">
     <div class="card blue">
       <h3>1 · Review schema.sql</h3>
       <ul class="small">
-        <li>Five tables, matching the diagram?</li>
+        <li>Four tables, matching the diagram?</li>
         <li>Types: UUID ids, BOOLEAN, DATE, TIMESTAMPTZ?</li>
         <li>Every line on the diagram is a foreign key?</li>
         <li>Which suggestions do you accept?</li>
@@ -248,77 +250,118 @@ Is there any additional information you may need from me?</pre>
   </div>
   <p class="bottomline">At the end: Database → Schema Visualizer should look like your DrawSQL diagram.</p>
   <aside class="notes">
-    <p><b>** LIVE, about 7 minutes. **</b> Open <code>schema.sql</code> and scroll it with the class. Take Claude's suggestions one by one: "agree" or "no, keep my diagram". Typical ones: indexes on FK columns (accept), defaults for created_at (accept), TEXT instead of VARCHAR (your call).</p>
+    <p><b>** LIVE, about 6 minutes. **</b> Open <code>schema.sql</code> and scroll it with the class. Take Claude's suggestions one by one: "agree" or "no, keep my diagram". Typical ones: indexes on FK columns (accept), defaults for created_at (accept), TEXT instead of VARCHAR (your call).</p>
     <p>Approve each Supabase MCP call as it comes. After each table, switch to the Table Editor and check it against the diagram out loud.</p>
-    <p><b>Short on time?</b> Verify the first two tables carefully, then say "continue with the rest, pause after task_tags" and check everything in the Schema Visualizer.</p>
-    <p>If Claude asks about Row Level Security: say yes, and explain that with no rules yet the API returns nothing. That's for the authentication lecture.</p>
+    <p><b>Short on time?</b> Verify the first two tables carefully, then say "continue with the rest, pause after task_tags" and check everything in the Schema Visualizer. You need about 13 minutes left for the connection.</p>
+    <p>Row Level Security: <code>schema.sql</code> should turn it on for all four tables. If Claude didn't, push back. "With RLS on and no rules, the app can't see anything. We'll write the rules in a few minutes."</p>
     <p>Backup if the build stalls: <code>demo-kit/schema.sql</code> runs as-is in the SQL Editor.</p>
   </aside>
 </section>
 
-<!-- ============ GUARDRAILS + REUSE (36–42) ============ -->
-<section class="slide" data-seg="Guardrails" data-at="36">
-  <h2>Delegate the typing, not the responsibility</h2>
-  <ul>
-    <li>Connect Claude to a <b>development</b> project, never production</li>
-    <li>Approve each Supabase tool call. Read it first.</li>
-    <li>Only looking? Add <code>&amp;read_only=true</code> to the MCP URL</li>
-    <li>The <code>service_role</code> key never goes in front-end code</li>
-    <li>Not sure yet? Split it: load the schema → CRUD functions → wire up the UI, one session each</li>
-  </ul>
+<!-- ============ CONNECT TICKED (29–37) ============ -->
+<section class="slide diagram" data-seg="Connect Ticked" data-at="29">
+  <img src="../diagrams/DB2-04-rls-gate.png" alt="Ticked calls the Supabase API with the publishable key; Row Level Security checks each request against policies before it reaches the tables">
+  <div class="src">diagrams/DB2-04-rls-gate.tldr</div>
   <aside class="notes">
-    <p>These come from Supabase's own MCP security guidance. The server acts with <b>your</b> permissions, so treat it like handing someone your keys.</p>
-    <p>Splitting sessions "isn't inefficiency, it's good engineering. Each phase has a clear success check before you move on."</p>
+    <p>"Supabase gave us an API for every table the moment we made it. Our React app will call it with the <b>publishable key</b>, which is public: it ships to every browser."</p>
+    <p>"So what stops a stranger from deleting everything? <b>Row Level Security</b>. It's a guard at every table. With RLS on and no <b>policies</b> (rules), the guard says no to everything."</p>
+    <p>"Ticked has no logins yet, so today's rules are wide open: dev only, fake data. When accounts arrive in a future lecture, the rule becomes 'you can only see your own tasks'."</p>
   </aside>
 </section>
 
-<section class="slide" data-seg="Reuse it" data-at="38">
-  <h2>Package it: a Supabase sub-agent</h2>
-  <div class="cols wide-left">
-    <pre style="font-size:20px"><span class="c"># .claude/agents/supabase-agent.md</span>
----
-name: supabase-agent
-description: Backend specialist responsible for
-  Supabase database management, API integrations,
-  PostgreSQL schema design, security, and docs.
-model: sonnet
-mcpServers:
-  - supabase
-  - context7
-skills:
-  - postgresql-table-design
----</pre>
-    <div class="card">
-      <h3>What it adds</h3>
+<section class="slide" data-seg="Connect Ticked" data-at="30">
+  <h2>Prompt 2: plug the app in</h2>
+  <pre style="font-size:19px">Now let's connect my app to this database.
+@src/data/db.js is the only file in my app that reads or writes data.
+
+Please:
+1. Use the Context7 MCP to look up the current `supabase-js` docs first.
+2. Use the Supabase MCP to check my tables. RLS is on and my app has no logins yet.
+   Propose the policies the app needs, explain each one, and wait for my OK.
+3. Install `@supabase/supabase-js`. Put my project URL and my publishable (anon)
+   key in `.env.local`. Never the secret / service_role key.
+4. Rewrite `src/data/db.js` to use Supabase. Keep every function name, its
+   inputs and what it returns, so no page or component has to change.
+5. Don't add sample data. Then stop and tell me how to run it.</pre>
+  <aside class="notes">
+    <p>Full text: <code>demo-kit/connect-prompt.md</code>. Paste it into the <b>same</b> Claude session: it already knows the tables.</p>
+    <p>"Why does this work in one prompt? Because when we built Ticked, we told Claude to keep all the data code in one file, shaped like these tables. Planning yesterday pays off today."</p>
+    <p>This is the curriculum's "load the schema, then CRUD functions, then wire up the UI", done as one small change because the UI was already built around the data layer.</p>
+  </aside>
+</section>
+
+<section class="slide" data-seg="Connect Ticked" data-at="31">
+  <h2>Live: approve the rules, then refresh</h2>
+  <div class="cols">
+    <div class="card blue">
+      <h3>1 · Read before you approve</h3>
       <ul class="small">
-        <li>Checks the connected project before changing anything</li>
-        <li>Never runs destructive changes without your OK</li>
-        <li>Writes docs for every backend change</li>
-        <li>Analyze → research → plan → implement → verify → document</li>
+        <li>Policies: read, add, change, delete, <b>to anon</b></li>
+        <li>Is each one something Ticked actually does?</li>
+        <li><code>.env.local</code>: URL + <b>publishable</b> key only</li>
+        <li>Only <code>db.js</code> (and a client file) changed?</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <h3>2 · The test</h3>
+      <ul class="small">
+        <li><code>npm run dev</code>, open Ticked: empty</li>
+        <li>Add a project and a task, tag it</li>
+        <li><b>Refresh.</b> Still there.</li>
+        <li>Table Editor: the same rows</li>
       </ul>
     </div>
   </div>
+  <p class="bottomline">Yesterday a refresh wiped everything. Today the data lives in PostgreSQL.</p>
   <aside class="notes">
-    <p>Same idea as the front-end agent last lecture. Full file: <code>demo-kit/.claude/agents/supabase-agent.md</code> (it's the example from the reading).</p>
-    <p>Optional live step (30 sec), second terminal: <code>mkdir -p .claude/agents && cp ~/db-kit/.claude/agents/supabase-agent.md .claude/agents/</code>, then <code>/agents</code> in Claude.</p>
-    <p>"Front-end agent plus Supabase agent: that's a small team you can spin up for every project."</p>
+    <p><b>** LIVE, about 6 minutes. **</b> Approve the Context7 lookups. When Claude proposes policies, read one out loud: "<i>for select to anon using (true)</i>: anyone with the public key can read every row. Fine for fake class data, not for real users." Then approve the Supabase call.</p>
+    <p>When it's done, in a second terminal: <code>npm run dev</code>. Ticked opens <b>empty</b> (the database has no rows). Point at the empty state: "That's not a bug, our database is empty."</p>
+    <p>Add a project "Databases", then a task "Finish the homework" in it, tagged <i>school</i>. Tick it. <b>Refresh.</b> Still there, still ticked. Switch to the Table Editor: the rows are in <code>projects</code>, <code>tasks</code>, <code>tags</code> and <code>task_tags</code>. Edit a task title in the Table Editor, refresh Ticked: it changed.</p>
+    <p>If the app shows an error banner: ask Claude "the app shows this error: …, use the Supabase MCP to check the policies and logs". Usually it's a missing policy or a typo in <code>.env.local</code> (restart <code>npm run dev</code> after editing it).</p>
+    <p>Backup: <code>demo-kit/dev-policies.sql</code> in the SQL Editor, and <code>demo-kit/backup-task-manager-supabase/</code> is a finished connected copy (see the RUNBOOK).</p>
   </aside>
 </section>
 
-<section class="slide statement" data-seg="Wrap up" data-at="40">
-  <h2>Your app now has somewhere to remember things.</h2>
-  <p>In future lectures we connect the React front-end to these tables: Create, Read, Update, Delete.</p>
+<!-- ============ GUARDRAILS + REUSE (37–39) ============ -->
+<section class="slide" data-seg="Guardrails" data-at="37">
+  <h2>Delegate the typing, not the responsibility</h2>
+  <div class="cols wide-left">
+    <ul class="small">
+      <li>Connect Claude to a <b>development</b> project, never production</li>
+      <li>Approve each Supabase tool call. Read it first.</li>
+      <li>Only looking? Add <code>&amp;read_only=true</code> to the MCP URL</li>
+      <li>The secret (<code>service_role</code>) key never goes in front-end code</li>
+      <li>Keep RLS on. Open policies are for dev data only.</li>
+    </ul>
+    <div class="card">
+      <h3>Package it: a sub-agent</h3>
+      <pre style="font-size:16px"><span class="c"># .claude/agents/supabase-agent.md</span>
+name: supabase-agent
+mcpServers: [supabase, context7]
+skills: [postgresql-table-design]</pre>
+      <p class="small">Checks the project first, never runs destructive changes without your OK, documents every change.</p>
+    </div>
+  </div>
   <aside class="notes">
-    <p>Recap: Supabase hosts a real PostgreSQL database. The MCP lets Claude work on it. Your stories and diagram are the instructions. You approve and verify every step.</p>
+    <p>The guardrails come from Supabase's own MCP security guidance. The server acts with <b>your</b> permissions, so treat it like handing someone your keys.</p>
+    <p>The sub-agent is the example from the reading; full file in <code>demo-kit/.claude/agents/supabase-agent.md</code>. Same idea as last lecture's front-end agent: "Front-end agent plus Supabase agent: a small team you can spin up for every project." Students add it in the homework.</p>
   </aside>
 </section>
 
-<section class="slide" data-seg="Wrap up" data-at="41">
+<section class="slide statement" data-seg="Wrap up" data-at="39">
+  <h2>Ticked remembers now.</h2>
+  <p>Create, Read, Update, Delete: every click is a row in PostgreSQL. In future lectures: logins, and rules so you only see your own tasks.</p>
+  <aside class="notes">
+    <p>Recap: Supabase hosts a real PostgreSQL database. The MCP lets Claude work on it. Your stories and diagram are the instructions. RLS policies decide who can touch what. You approve and verify every step.</p>
+  </aside>
+</section>
+
+<section class="slide" data-seg="Wrap up" data-at="40">
   <h2>Homework, Part II</h2>
   <div class="cols">
     <div>
       <ol style="list-style:none;padding-left:0">
-        <li><b>Priority 1, your own app:</b> put your database on Supabase. New project, Supabase MCP, the skill, your stories and diagram, one table at a time</li>
+        <li><b>Priority 1, your own app:</b> put your database on Supabase. New project, Supabase MCP, the skill, your stories and diagram, one table at a time. Stretch: connect your app with prompt 2</li>
         <li><b>Priority 2, FreeCodeCamp:</b> 100 steps of the JavaScript certification</li>
         <li><b>Priority 3, Netflix Clone II:</b> build its schema on Supabase. A users table is fine; no login yet.</li>
       </ol>

@@ -15,7 +15,7 @@
   <h1>Relational databases: plan your data before Claude builds it</h1>
   <p class="sub">Today you design the data on paper. Next lecture it moves into a real cloud database.</p>
   <aside class="notes">
-    <p><b>Before class:</b> open these tabs: <code>drawsql.app/draw</code> (no account needed), the Noun Hunt page, the Relationship Sorter page. In DrawSQL, pick <b>PostgreSQL</b> and <b>Start with a blank canvas</b> so it's ready at slide 12. Press <b>T</b> to start the clock.</p>
+    <p><b>Before class:</b> open these tabs: Ticked (<code>…/Databases-and-Supabase/task-manager/</code>) for slide 3, <code>drawsql.app/draw</code> (no account needed), the Noun Hunt page, the Relationship Sorter page. In DrawSQL, pick <b>PostgreSQL</b> and <b>Start with a blank canvas</b> so it's ready at slide 12. Press <b>T</b> to start the clock.</p>
     <p>Keep <code>demo-kit/task-manager-erd.png</code> handy as the backup if DrawSQL misbehaves.</p>
   </aside>
 </section>
@@ -35,10 +35,17 @@
 </section>
 
 <section class="slide statement" data-seg="Open" data-at="2">
-  <h2>Refresh last lecture's workout app. Every workout is gone.</h2>
+  <h2>Add a task. Refresh. It's gone.</h2>
   <p>The browser forgets. A database remembers, for every user, on every device.</p>
+  <p class="small muted">kabeier.github.io/Databases-and-Supabase/task-manager/</p>
   <aside class="notes">
-    <p>If you have Liftlog open, log a workout, refresh, and show it vanish. "We told Claude to keep the data in the browser only. Real apps need somewhere that remembers. That's what the next two lectures are about."</p>
+    <p><b>** LIVE, about 1 minute. **</b> Open <b>Ticked</b>, our task manager (link above, or the class site). It was built exactly like Liftlog last lecture: wireframes, user stories, a style guide, and Claude Code.</p>
+    <ul>
+      <li>Click <b>+ New task</b>, type "Study for the database quiz", tag it <i>school</i>, save. It's at the top of the list.</li>
+      <li>Tick another task complete.</li>
+      <li>Refresh the page. Your task is gone and the ticked one is open again.</li>
+    </ul>
+    <p>"We told Claude to keep the data in the browser only. Real apps need somewhere that remembers. Today we design that place; next lecture we build it in Supabase and plug this exact app into it."</p>
   </aside>
 </section>
 
@@ -102,8 +109,9 @@ WHERE is_complete = false;
   <img src="../diagrams/DB1-02-nouns-to-tables.png" alt="User stories with the nouns in capitals; each noun becomes a table and its details become columns">
   <div class="src">diagrams/DB1-02-nouns-to-tables.tldr</div>
   <aside class="notes">
-    <p>"You already wrote user stories for your app. They're the start of your database too." Read the stories, point at the nouns in caps: USER, TASK, PROJECT. Each becomes a table.</p>
+    <p>"You already wrote user stories for your app. They're the start of your database too." Read the stories, point at the nouns in caps: PROJECT, TASK, TAG. Each becomes a table.</p>
     <p>Then the details: a task has a title, a due date, a done flag, a created time. Those become columns.</p>
+    <p>Point at the grey box: "user" is a noun too, but Ticked has no logins yet, so everyone shares the same data. When accounts arrive in a future lecture, a users table appears. "A table exists because the app needs to remember something about it."</p>
     <p>"No computer needed. Careful reading and clear thinking."</p>
   </aside>
 </section>
@@ -114,7 +122,7 @@ WHERE is_complete = false;
     <div class="card blue">
       <h3>Its own table</h3>
       <ul>
-        <li><b>project</b>: has a name, a description, an owner</li>
+        <li><b>project</b>: has a name, a description, its own tasks</li>
         <li><b>tag</b>: has a name, and many tasks share it</li>
       </ul>
     </div>
@@ -213,7 +221,7 @@ WHERE is_complete = false;
         <li>No account needed</li>
         <li>Pick <b>PostgreSQL</b></li>
         <li>Add table, then add columns and types</li>
-        <li>Tables: <b>users</b>, <b>projects</b>, <b>tasks</b></li>
+        <li>Tables: <b>projects</b>, <b>tasks</b></li>
       </ul>
     </div>
   </div>
@@ -222,11 +230,11 @@ WHERE is_complete = false;
     <ul>
       <li>Click the <b>Add table</b> icon (top-left toolbar), click the canvas. Rename it in the left panel (pencil icon).</li>
       <li>In the left panel: column name, type, <b>N</b> = nullable, key icon = primary key. <b>Add Column</b> for more.</li>
-      <li><b>users</b>: id uuid (PK), name varchar(100), email varchar(255), created_at timestamptz</li>
-      <li><b>projects</b>: id uuid (PK), name varchar(255), description text (nullable), owner_id uuid, created_at timestamptz</li>
-      <li><b>tasks</b>: the table on this slide, plus created_by uuid</li>
+      <li><b>projects</b>: id uuid (PK), name varchar(255), description text (nullable), created_at timestamptz</li>
+      <li><b>tasks</b>: the table on this slide. Mark due_date and project_id nullable (<b>N</b>): a task doesn't need a due date or a project.</li>
     </ul>
     <p>Ask the class for each type before you type it. Don't draw lines yet; that's after relationships.</p>
+    <p>If someone asks "where are the users?": no logins yet, so no users table. It shows up when accounts do.</p>
     <p>Running long? Use <b>Import SQL</b> with <code>demo-kit/schema.sql</code> and talk through what appears.</p>
   </aside>
 </section>
@@ -281,10 +289,9 @@ WHERE is_complete = false;
   <div class="cols">
     <div>
       <ol>
-        <li>Drag from <b>projects.owner_id</b> to <b>users.id</b></li>
-        <li><b>tasks.project_id</b> → projects.id</li>
-        <li><b>tasks.created_by</b> → users.id</li>
+        <li>Drag from <b>tasks.project_id</b> to <b>projects.id</b></li>
         <li>Add <b>tags</b> and the junction table <b>task_tags</b></li>
+        <li>Connect <b>task_tags</b> to tasks and to tags</li>
         <li>Screenshot it. That's tomorrow's input.</li>
       </ol>
     </div>
@@ -308,11 +315,11 @@ WHERE is_complete = false;
 </section>
 
 <section class="slide diagram" data-seg="Wrap up" data-at="39">
-  <img src="../diagrams/DB1-04-task-manager-erd.png" alt="DrawSQL diagram of the Task Manager: users, projects, tasks, task_tags and tags, connected by foreign keys">
+  <img src="../diagrams/DB1-04-task-manager-erd.png" alt="DrawSQL diagram of the Task Manager: projects, tasks, task_tags and tags, connected by foreign keys">
   <div class="src">demo-kit/task-manager-erd.png</div>
   <aside class="notes">
     <p>This is the backup screenshot, the same diagram you just drew. Walk it once more: "Every line is a foreign key. The crow's foot (the three-pronged end) is the many side."</p>
-    <p>"Tomorrow we hand Claude this picture plus the user stories, and it builds the real database in Supabase, one table at a time, while we check its work."</p>
+    <p>"Tomorrow we hand Claude this picture plus the user stories, and it builds the real database in Supabase, one table at a time, while we check its work. Then we connect Ticked to it, and refresh stops deleting everything."</p>
   </aside>
 </section>
 

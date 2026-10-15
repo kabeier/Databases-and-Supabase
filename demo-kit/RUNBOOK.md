@@ -6,14 +6,14 @@
 
 At the end we have a front-end and a database, but **they can't talk yet**. Connecting them through an API is a future lecture.
 
-**Folder layout (matches the full-stack lecture):**
+**Folder layout:** the app folder is the project, just as `npm create vite` made it in the SPA lectures.
 ```
-~/demos/ticked/
-├── front-end/   Ticked + app_outline + CLAUDE.md + .claude/ (design skills, front-end-agent)
-└── supabase/    made live in Lecture 2: .mcp.json, .claude/ (db skill, supabase-agent),
-                 user_stories.md, task-manager-erd.png, schema.sql
+~/demos/ticked/          Ticked: src/, package.json, app_outline/, CLAUDE.md,
+│                        .claude/ (design skills, front-end-agent)
+└── supabase/            made live in Lecture 2: .mcp.json, .claude/ (db skill,
+                         supabase-agent), user_stories.md, task-manager-erd.png, schema.sql
 ```
-In a future lecture the two `.claude/` folders merge into one at `ticked/`, and Claude connects the halves.
+The full-stack lecture's reading shows `your-project/` with `front-end/` and `supabase/` side by side and one shared `.claude/`. So in that lecture the app files move into `front-end/` and the two `.claude/` folders merge.
 
 ## What's in the kit
 
@@ -37,8 +37,8 @@ claude mcp list              # context7 should be there from the SPA lecture
 # Put the demo kit somewhere short, so the live commands are easy to type
 cp -r /mnt/storage/CP/new_Lectures/claude-supabase-db/demo-kit ~/db-kit
 mkdir -p ~/demos/ticked
-cp -r ~/db-kit/backup-task-manager ~/demos/ticked/front-end
-cd ~/demos/ticked/front-end && npm install
+cp -r ~/db-kit/backup-task-manager ~/demos/ticked
+cd ~/demos/ticked && npm install
 ```
 
 Log in to supabase.com in the browser you'll present from.
@@ -47,7 +47,7 @@ Log in to supabase.com in the browser you'll present from.
 
 Nothing to install. Before class:
 
-1. Open Ticked: `https://kabeier.github.io/Databases-and-Supabase/task-manager/`, or `npm run dev` in `~/demos/ticked/front-end`.
+1. Open Ticked: `https://kabeier.github.io/Databases-and-Supabase/task-manager/`, or `npm run dev` in `~/demos/ticked`.
 2. Open `https://drawsql.app/draw`, pick **PostgreSQL**, then **Start with a blank canvas**.
 3. Have `user_stories.md` open to read from, and `task-manager-erd.png` as the backup picture.
 4. **Running long at slide 12?** Use **File → Import** and paste the `create table` part of `schema.sql`. It creates all five tables with their lines (it replaces the canvas).
@@ -78,7 +78,7 @@ How DrawSQL works (checked October 2026):
 rm -rf ~/demos/ticked/supabase       # removes .mcp.json, the db skill, the agent and Claude's files
 ```
 
-`front-end/` is untouched by Lecture 2, so it stays.
+The app itself is untouched by Lecture 2, so it stays.
 
 In Supabase, delete the dry-run project (Project Settings → General → Delete project). The free tier allows 2 active projects, and you need a free slot to create one live.
 
@@ -94,7 +94,7 @@ One terminal in `~/demos/ticked`. Add a second tab when you install the skill.
 |---|---|---|---|
 | 7 (~7) | browser | **New project** form, top to bottom: Organization (point at it: "first sign-in, you create one"), GitHub empty, name `task-manager`, **Generate → Copy → save the password**, Region closest, Security: keep **Enable Data API** ✓ and **Automatically expose new tables** ✓, turn **Enable automatic RLS** ✓ on, Advanced untouched → Create | "A real PostgreSQL server, just for us, in about 90 seconds." |
 | 8 (~9) | browser | Tour: Table Editor, SQL Editor, Database, then point at **Connect** | "This is where you check Claude's work." |
-| 9 (~11) | terminal 1 | `cd ~/demos/ticked` (the project root), `ls` (just `front-end/`), `mkdir supabase`, `cd supabase`. Paste the command from **Connect → MCP → Claude Code**. Then `claude`, trust the folder, **Use this MCP server**, `/mcp` → supabase → **Authenticate** | "The database gets its own folder, next to the front-end. Project scope: this MCP belongs to this folder and this database." |
+| 9 (~11) | terminal 1 | `cd ~/demos/ticked` (the app's project), `ls`, `mkdir supabase`, `cd supabase`. Paste the command from **Connect → MCP → Claude Code**. Then `claude`, trust the folder, **Use this MCP server**, `/mcp` → supabase → **Authenticate** | "The database gets its own folder, next to the front-end. Project scope: this MCP belongs to this folder and this database." |
 | 10 (~14) | terminal 2 | `cd ~/demos/ticked/supabase` and the `setup-db-skill.sh` one-liner, then `/skills` in Claude | "A skill is a folder of rules." |
 | 11 (~16) | terminal 2 | `cp ~/db-kit/user_stories.md ~/db-kit/task-manager-erd.png .` | "Don't come empty-handed." |
 | 13 (~18) | Claude | Paste the prompt from `prompt.md`. Approve file edits for the session; approve each Supabase call one by one | "I approve the plan, and I check every table." |
@@ -110,5 +110,5 @@ Claude asks permission before it edits files or calls a tool. For file edits, pi
 
 ## Heads-up for the next lectures
 
-- **Full-stack lecture (RESTful APIs, then connecting it all):** the Postman exercise calls `/users` and `/tasks` with the **publishable key**. RLS is on with no rules, so reads return `[]` and writes are refused (401/403), until temporary dev rules are added. The supabase-agent can propose those, and you approve them. That lecture's status-code table lists "403: RLS policy violation", so this can be a teaching moment. Its folder layout is `ticked/` with `front-end/`, `supabase/` and one shared `.claude/`.
+- **Full-stack lecture (RESTful APIs, then connecting it all):** the Postman exercise calls `/users` and `/tasks` with the **publishable key**. RLS is on with no rules, so reads return `[]` and writes are refused (401/403), until temporary dev rules are added. The supabase-agent can propose those, and you approve them. That lecture's status-code table lists "403: RLS policy violation", so this can be a teaching moment. Its reading's folder layout is `your-project/` with `front-end/`, `supabase/` and one shared `.claude/`: move the app files into `ticked/front-end/` then (Claude can do it).
 - **Authentication lecture:** backs up and drops these tables, rebuilds `users` as a mirror of `auth.users` (via a trigger), and adds RLS rules on `user_id`. `tasks.user_id` and `projects.user_id` are already in place for that.

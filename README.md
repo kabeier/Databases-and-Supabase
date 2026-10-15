@@ -52,7 +52,7 @@ Each deck is a single HTML file. Open it, press **P** for presenter notes in a s
 - **The app and the database are not connected in these lectures.** Connecting them through an API is a future lecture. The slides say so clearly.
 - **Aligned with the next lectures:**
   - **Users table:** the full-stack lecture's Postman exercise uses `/users` and `/tasks`. The authentication lecture rebuilds `users` around Supabase logins, with rules on `user_id`.
-  - **Folders:** the database work lives in `ticked/supabase/`, next to `ticked/front-end/`, matching the full-stack lecture's layout.
+  - **Folders:** the app is `ticked/` (as students made it in the SPA lectures), and the database work lives in `ticked/supabase/`. The full-stack lecture's reading shows the app in a `front-end/` folder next to `supabase/`, so that move happens then.
   - **RLS:** see `demo-kit/RUNBOOK.md` → "Heads-up for the next lectures".
 - **No users table yet.** There are no logins, so everyone shares the data. Accounts and "only your own tasks" rules come in a future lecture.
 - **RLS:** `schema.sql` turns Row Level Security on (Supabase's advice). The rules come in future lectures; the dashboard can still see everything.

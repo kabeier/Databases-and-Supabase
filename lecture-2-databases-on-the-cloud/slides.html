@@ -127,8 +127,9 @@
 
 <section class="slide" data-seg="Live: connect Claude" data-at="11">
   <h2>Live: connect Claude Code with the Supabase MCP</h2>
-  <pre style="font-size:21px">mkdir -p ~/demos/ticked/supabase && cd ~/demos/ticked/supabase
-<span class="c"># ticked/front-end = the React app · ticked/supabase = the database's context</span>
+  <pre style="font-size:21px">cd ~/demos/ticked        <span class="c"># your project's root folder (front-end/ is already here)</span>
+mkdir supabase           <span class="c"># a new folder next to front-end/</span>
+cd supabase
 
 <span class="c"># Supabase → Connect → MCP → Claude Code → copy the command. It looks like:</span>
 claude mcp add --scope project --transport http supabase \
@@ -137,7 +138,7 @@ claude mcp add --scope project --transport http supabase \
 claude          <span class="c"># trust the folder → "Use this MCP server"</span>
 /mcp            <span class="c"># supabase → Authenticate → browser → back</span></pre>
   <aside class="notes">
-    <p><b>** LIVE, terminal. **</b> Show <code>ls ~/demos/ticked</code>: just <code>front-end/</code>, Ticked from the SPA lectures. Make <code>supabase/</code> next to it: "this folder is where all of the database context lives. The front-end has its own folder and its own Claude context. In a future lecture we merge the two into one full-stack project."</p>
+    <p><b>** LIVE, terminal. **</b> In the project's root folder, run <code>ls</code>: just <code>front-end/</code>, Ticked from the SPA lectures. Make a folder named <code>supabase</code> right there, next to it, and <code>cd</code> into it. Draw it out loud: <code>ticked/</code> → <code>front-end/</code> + <code>supabase/</code>. "this folder is where all of the database context lives. The front-end has its own folder and its own Claude context. In a future lecture we merge the two into one full-stack project."</p>
     <p>In Supabase: <b>Connect</b> (top bar) → <b>MCP</b> → choose <b>Claude Code</b> → copy the <code>claude mcp add</code> command. Paste it in the terminal, not inside Claude.</p>
     <p>Point out <code>--scope project</code>: "Last lecture we used <code>--scope user</code> for tools every project needs. This one is <b>project</b> scope: it's written to a <code>.mcp.json</code> file in this folder, because it's tied to this one database." <code>project_ref</code> is your project's id; the URL locks Claude to this project.</p>
     <p>Start <code>claude</code>, trust the folder, choose <b>Use this MCP server</b>. Then <code>/mcp</code> → supabase → <b>Authenticate</b>. A browser tab opens: approve, pick your organization. Back in the terminal it should show connected.</p>

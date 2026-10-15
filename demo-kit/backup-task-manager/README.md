@@ -7,6 +7,15 @@ projects, tag them, give them due dates, and tick them off. It was built from th
 There's no backend yet. The data lives in memory, so **refreshing the page resets everything**
 to the seed data.
 
+## What's in this folder
+
+This is the project as it stands after the SPA lectures: the app plus the context Claude Code used to build it.
+
+- `app_outline/`: the plan (user journey, `app.png`, style guide, one folder per page with a wireframe and a user story)
+- `CLAUDE.md`: written by `/init` after the first build phase
+- `.claude/skills/`: the four design skills (frontend-design, ui-ux-pro-max, taste-skill, design-motion-principles)
+- `.claude/agents/front-end-agent.md`: the front-end sub-agent
+
 ## Run it
 
 ```bash
@@ -17,8 +26,8 @@ npm install && npm run dev
 
 Every read and write goes through **one file: [`src/data/db.js`](src/data/db.js)**. It keeps four
 arrays shaped like the database tables (`projects`, `tasks`, `tags`, `task_tags`) and exports async
-functions (`listTasks`, `createTask`, `deleteProject`, ...). To move to a real database (Supabase),
-rewrite only that file; `src/context/TaskContext.jsx` and the pages stay the same.
+functions (`listTasks`, `createTask`, `deleteProject`, ...). When the app gets a real back-end
+(an API, in a future lecture), only that file changes; `src/context/TaskContext.jsx` and the pages stay the same.
 
 ## Pages
 

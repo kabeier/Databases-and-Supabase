@@ -13,7 +13,7 @@
 <section class="slide title" data-seg="Open" data-at="0">
   <div class="kicker">Building Applications · Relational Databases · Part 2 of 2</div>
   <h1>Databases on the cloud: Supabase + Claude Code</h1>
-  <p class="sub">Last lecture you drew the database. Now Claude builds it in the cloud, you check every step, and Ticked stops forgetting.</p>
+  <p class="sub">Last lecture you drew the database. Now Claude builds it in the cloud, and you check every step.</p>
   <aside class="notes">
     <p><b>Before class</b> (see demo-kit/RUNBOOK.md): logged in to supabase.com in your browser, with <b>no project created yet</b> (you create it live). <code>~/db-kit</code> holds the demo kit. <code>~/demos/task-manager</code> holds a fresh copy of Ticked with <code>npm install</code> done. Context7 is still installed from the SPA lecture (<code>claude mcp list</code>). One terminal open in <code>~/demos/task-manager</code>.</p>
     <p>Tabs ready: Supabase dashboard, the Approve or Push Back page. Press <b>T</b> to start the clock.</p>
@@ -27,7 +27,7 @@
     <li>Create a Supabase project and tour the dashboard, live</li>
     <li>Connect Claude Code to it with the Supabase MCP</li>
     <li>Hand Claude the stories and the diagram, and build the tables one at a time</li>
-    <li>Plug Ticked into the database: add a task, refresh, it's still there</li>
+    <li>Explore the finished database in the Supabase dashboard</li>
   </ul>
   <aside class="notes">
     <p>"The goal isn't to become a database administrator. It's to know where your data lives, how it's organized, and how to supervise Claude while it builds it."</p>
@@ -203,7 +203,7 @@ Is there any additional information you may need from me?</pre>
 
 <section class="slide activity" data-seg="Activity: Approve or Push Back?" data-at="18">
   <h2>Activity: Approve or push back?</h2>
-  <div class="countdown" data-sec="240"></div>
+  <div class="countdown" data-sec="360"></div>
   <ol class="steps">
     <li>I paste the prompt. Claude starts reading docs.</li>
     <li>Meanwhile: things Claude might say while building a database</li>
@@ -213,12 +213,12 @@ Is there any additional information you may need from me?</pre>
   <p class="muted small" style="margin-top:24px">Page: activity-approve-or-push-back/</p>
   <aside class="notes">
     <p><b>** LIVE: paste the prompt into Claude first. **</b> When it asks to use the skill, Context7 or write <code>schema.sql</code>, approve. Pick <b>"Yes, allow all edits during this session"</b> for file edits. Keep approving <b>Supabase MCP calls one by one</b>: that's the point of today.</p>
-    <p>Then share the activity page. About 30 seconds a card; do the first 8 (the core set). When Claude stops after writing schema.sql, end the activity. Cards 7 and 8 preview the connection step at the end of class.</p>
+    <p>Then share the activity page. About 30 seconds a card; the first 8 are the core set; use the extras if Claude is still working. When Claude stops after writing schema.sql, end the activity.</p>
     <p>Answers are on the page (space to reveal) and in your Notes folder ("Database Activities - Answer Keys").</p>
   </aside>
 </section>
 
-<section class="slide diagram" data-seg="Pause and verify" data-at="22">
+<section class="slide diagram" data-seg="Pause and verify" data-at="24">
   <img src="../diagrams/DB2-03-pause-and-verify.png" alt="The loop: Claude writes schema.sql, you review it, Claude creates one table, you check the Table Editor, then continue to the next table">
   <div class="src">diagrams/DB2-03-pause-and-verify.tldr</div>
   <aside class="notes">
@@ -226,7 +226,7 @@ Is there any additional information you may need from me?</pre>
   </aside>
 </section>
 
-<section class="slide" data-seg="Pause and verify" data-at="23">
+<section class="slide" data-seg="Pause and verify" data-at="25">
   <h2>Live: review, build, verify</h2>
   <div class="cols">
     <div class="card blue">
@@ -252,78 +252,60 @@ Is there any additional information you may need from me?</pre>
   <aside class="notes">
     <p><b>** LIVE, about 6 minutes. **</b> Open <code>schema.sql</code> and scroll it with the class. Take Claude's suggestions one by one: "agree" or "no, keep my diagram". Typical ones: indexes on FK columns (accept), defaults for created_at (accept), TEXT instead of VARCHAR (your call).</p>
     <p>Approve each Supabase MCP call as it comes. After each table, switch to the Table Editor and check it against the diagram out loud.</p>
-    <p><b>Short on time?</b> Verify the first two tables carefully, then say "continue with the rest, pause after task_tags" and check everything in the Schema Visualizer. You need about 13 minutes left for the connection.</p>
-    <p>Row Level Security: <code>schema.sql</code> should turn it on for all four tables. If Claude didn't, push back. "With RLS on and no rules, the app can't see anything. We'll write the rules in a few minutes."</p>
+    <p><b>Short on time?</b> Verify the first two tables carefully, then say "continue with the rest, pause after task_tags" and check everything in the Schema Visualizer. Leave about 5 minutes to explore.</p>
+    <p>Row Level Security: <code>schema.sql</code> should turn it on for all four tables. If Claude didn't, push back. "RLS locks each table to everything except the dashboard and Claude until we write rules. Those come with the API and logins in future lectures."</p>
     <p>Backup if the build stalls: <code>demo-kit/schema.sql</code> runs as-is in the SQL Editor.</p>
   </aside>
 </section>
 
-<!-- ============ CONNECT TICKED (29–37) ============ -->
-<section class="slide diagram" data-seg="Connect Ticked" data-at="29">
-  <img src="../diagrams/DB2-04-rls-gate.png" alt="Ticked calls the Supabase API with the publishable key; Row Level Security checks each request against policies before it reaches the tables">
-  <div class="src">diagrams/DB2-04-rls-gate.tldr</div>
-  <aside class="notes">
-    <p>"Supabase gave us an API for every table the moment we made it. Our React app will call it with the <b>publishable key</b>, which is public: it ships to every browser."</p>
-    <p>"So what stops a stranger from deleting everything? <b>Row Level Security</b>. It's a guard at every table. With RLS on and no <b>policies</b> (rules), the guard says no to everything."</p>
-    <p>"Ticked has no logins yet, so today's rules are wide open: dev only, fake data. When accounts arrive in a future lecture, the rule becomes 'you can only see your own tasks'."</p>
-  </aside>
-</section>
-
-<section class="slide" data-seg="Connect Ticked" data-at="30">
-  <h2>Prompt 2: plug the app in</h2>
-  <pre style="font-size:19px">Now let's connect my app to this database.
-@src/data/db.js is the only file in my app that reads or writes data.
-
-Please:
-1. Use the Context7 MCP to look up the current `supabase-js` docs first.
-2. Use the Supabase MCP to check my tables. RLS is on and my app has no logins yet.
-   Propose the policies the app needs, explain each one, and wait for my OK.
-3. Install `@supabase/supabase-js`. Put my project URL and my publishable (anon)
-   key in `.env.local`. Never the secret / service_role key.
-4. Rewrite `src/data/db.js` to use Supabase. Keep every function name, its
-   inputs and what it returns, so no page or component has to change.
-5. Don't add sample data. Then stop and tell me how to run it.</pre>
-  <aside class="notes">
-    <p>Full text: <code>demo-kit/connect-prompt.md</code>. Paste it into the <b>same</b> Claude session: it already knows the tables.</p>
-    <p>"Why does this work in one prompt? Because when we built Ticked, we told Claude to keep all the data code in one file, shaped like these tables. Planning ahead pays off."</p>
-    <p>This is the curriculum's "load the schema, then CRUD functions, then wire up the UI", done as one small change because the UI was already built around the data layer.</p>
-  </aside>
-</section>
-
-<section class="slide" data-seg="Connect Ticked" data-at="31">
-  <h2>Live: approve the rules, then refresh</h2>
+<!-- ============ EXPLORE (31–38) ============ -->
+<section class="slide" data-seg="Explore it" data-at="31">
+  <h2>Live: explore your database in Supabase</h2>
   <div class="cols">
     <div class="card blue">
-      <h3>1 · Read before you approve</h3>
+      <h3>Table Editor</h3>
       <ul class="small">
-        <li>Policies: read, add, change, delete, <b>to anon</b></li>
-        <li>Is each one something Ticked actually does?</li>
-        <li><code>.env.local</code>: URL + <b>publishable</b> key only</li>
-        <li>Only <code>db.js</code> (and a client file) changed?</li>
+        <li>Insert a project, then a task: pick its <code>project_id</code> from the list</li>
+        <li>Add a tag, then a <code>task_tags</code> row joining them</li>
+        <li>Break it: a <code>task_tags</code> row pointing at no task</li>
+        <li>Delete the project: the task stays, project empty</li>
       </ul>
     </div>
-    <div class="card green">
-      <h3>2 · The test</h3>
-      <ul class="small">
-        <li><code>npm run dev</code>, open Ticked: empty</li>
-        <li>Add a project and a task, tag it</li>
-        <li><b>Refresh.</b> Still there.</li>
-        <li>Table Editor: the same rows</li>
-      </ul>
+    <div>
+      <pre style="font-size:19px"><span class="c">-- SQL Editor: every task with its project</span>
+select t.title, p.name as project
+from tasks t
+left join projects p
+  on p.id = t.project_id;</pre>
+      <p class="small muted" style="margin-top:16px">Then: Database → Schema Visualizer</p>
     </div>
   </div>
-  <p class="bottomline">In Lecture 1 a refresh wiped everything. Now the data lives in PostgreSQL.</p>
   <aside class="notes">
-    <p><b>** LIVE, about 6 minutes. **</b> Approve the Context7 lookups. When Claude proposes policies, read one out loud: "<i>for select to anon using (true)</i>: anyone with the public key can read every row. Fine for fake class data, not for real users." Then approve the Supabase call.</p>
-    <p>When it's done, in a second terminal: <code>npm run dev</code>. Ticked opens <b>empty</b> (the database has no rows). Point at the empty state: "That's not a bug, our database is empty."</p>
-    <p>Add a project "Databases", then a task "Finish the homework" in it, tagged <i>school</i>. Tick it. <b>Refresh.</b> Still there, still ticked. Switch to the Table Editor: the rows are in <code>projects</code>, <code>tasks</code>, <code>tags</code> and <code>task_tags</code>. Edit a task title in the Table Editor, refresh Ticked: it changed.</p>
-    <p>If the app shows an error banner: ask Claude "the app shows this error: …, use the Supabase MCP to check the policies and logs". Usually it's a missing policy or a typo in <code>.env.local</code> (restart <code>npm run dev</code> after editing it).</p>
-    <p>Backup: <code>demo-kit/dev-policies.sql</code> in the SQL Editor, and <code>demo-kit/backup-task-manager-supabase/</code> is a finished connected copy (see the RUNBOOK).</p>
+    <p><b>** LIVE, about 5 minutes. **</b> This is the payoff for the diagram: "every rule we drew is now enforced by the database."</p>
+    <ul>
+      <li><b>Table Editor → projects → Insert row:</b> name "Databases". Leave id and created_at empty: the defaults fill them in. Point at the new UUID.</li>
+      <li><b>tasks → Insert row:</b> title "Finish the homework". For <code>project_id</code>, Supabase offers a list of projects to pick from, because it knows the foreign key. is_complete defaults to false.</li>
+      <li><b>tags</b>: add "school". <b>task_tags</b>: pick the task and the tag. "That row IS the many-to-many."</li>
+      <li><b>Break it:</b> in task_tags, paste a made-up task_id (or try a second "school" tag). The database refuses: foreign key / unique violation. "Bad data can't get in."</li>
+      <li><b>SQL Editor:</b> run the query on the slide. Read it like English.</li>
+      <li><b>Delete</b> the Databases project. Back in tasks, the task is still there with an empty project_id: that's <code>on delete set null</code>.</li>
+    </ul>
+    <p>Optional, if you have a minute: ask Claude "How many tasks are in each project? Use the Supabase MCP, read only." Approve the query.</p>
   </aside>
 </section>
 
-<!-- ============ GUARDRAILS + REUSE (37–39) ============ -->
-<section class="slide" data-seg="Guardrails" data-at="37">
+<section class="slide diagram" data-seg="Explore it" data-at="36">
+  <img src="../diagrams/DB2-04-missing-api.png" alt="Ticked (front-end) and the Supabase database are both ready, but the API between them is a dashed box for a future lecture">
+  <div class="src">diagrams/DB2-04-missing-api.tldr</div>
+  <aside class="notes">
+    <p>Be very clear here. Open Ticked, add a task, refresh: <b>it still disappears.</b> "We have a front-end. We have a database. They can't talk to each other yet."</p>
+    <p>"The missing piece is the API: the kitchen from the restaurant, which takes the app's requests and talks to the database. We build it in a future lecture, and then Ticked finally remembers."</p>
+    <p>"That's also why Ticked keeps all its data code in one file, <code>src/data/db.js</code>. When the API exists, that's the only file that changes."</p>
+  </aside>
+</section>
+
+<!-- ============ GUARDRAILS + REUSE (38–40) ============ -->
+<section class="slide" data-seg="Guardrails" data-at="38">
   <h2>Delegate the typing, not the responsibility</h2>
   <div class="cols wide-left">
     <ul class="small">
@@ -331,7 +313,7 @@ Please:
       <li>Approve each Supabase tool call. Read it first.</li>
       <li>Only looking? Add <code>&amp;read_only=true</code> to the MCP URL</li>
       <li>The secret (<code>service_role</code>) key never goes in front-end code</li>
-      <li>Keep RLS on. Open policies are for dev data only.</li>
+      <li>Keep Row Level Security on. Its rules come with the API.</li>
     </ul>
     <div class="card">
       <h3>Package it: a sub-agent</h3>
@@ -348,21 +330,21 @@ skills: [postgresql-table-design]</pre>
   </aside>
 </section>
 
-<section class="slide statement" data-seg="Wrap up" data-at="39">
-  <h2>Ticked remembers now.</h2>
-  <p>Create, Read, Update, Delete: every click is a row in PostgreSQL. In future lectures: logins, and rules so you only see your own tasks.</p>
+<section class="slide statement" data-seg="Wrap up" data-at="40">
+  <h2>We have a database. Ticked can't use it yet.</h2>
+  <p>The front-end and the database talk through an API. We build that in a future lecture, and then every click becomes a row in PostgreSQL.</p>
   <aside class="notes">
-    <p>Recap: Supabase hosts a real PostgreSQL database. The MCP lets Claude work on it. Your stories and diagram are the instructions. RLS policies decide who can touch what. You approve and verify every step.</p>
+    <p>Recap: Supabase hosts a real PostgreSQL database. The MCP lets Claude work on it. Your stories and diagram are the instructions. You approve and verify every step. Next comes the API that connects it to the app.</p>
   </aside>
 </section>
 
-<section class="slide" data-seg="Wrap up" data-at="40">
+<section class="slide" data-seg="Wrap up" data-at="41">
   <h2>Homework, Part II</h2>
   <div class="cols">
     <div>
       <ol style="list-style:none;padding-left:0">
         <li><b>Priority 1, Netflix Clone II:</b> build its schema on Supabase. A users table is fine; no login yet.</li>
-        <li><b>Priority 2, your own app:</b> put your database on Supabase. New project, Supabase MCP, the skill, your stories and diagram, one table at a time. Stretch: connect your app with prompt 2</li>
+        <li><b>Priority 2, your own app:</b> put your database on Supabase. New project, Supabase MCP, the skill, your stories and diagram, one table at a time.</li>
         <li><b>Priority 3, FreeCodeCamp:</b> 100 steps of the JavaScript certification</li>
       </ol>
     </div>

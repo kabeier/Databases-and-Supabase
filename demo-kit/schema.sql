@@ -40,6 +40,7 @@ create index on public.task_tags (tag_id);
 
 -- Supabase: every table in the public schema is reachable through the API.
 -- Row Level Security (RLS) locks each table until you add policies (rules).
+-- The rules come with the API in a future lecture; the dashboard can still see everything.
 alter table public.projects  enable row level security;
 alter table public.tasks     enable row level security;
 alter table public.tags      enable row level security;

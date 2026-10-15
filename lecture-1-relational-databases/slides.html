@@ -39,13 +39,13 @@
   <p>The browser forgets. A database remembers, for every user, on every device.</p>
   <p class="small muted">kabeier.github.io/Databases-and-Supabase/task-manager/</p>
   <aside class="notes">
-    <p><b>** LIVE, about 1 minute. **</b> Open <b>Ticked</b>, our task manager (link above, or the class site). It was built exactly like Liftlog last lecture: wireframes, user stories, a style guide, and Claude Code.</p>
+    <p><b>** LIVE, about 1 minute. **</b> Open <b>Ticked</b>, the task manager we built in the SPA lectures (link above, or <code>npm run dev</code> in your copy): wireframes, user stories, a style guide, and Claude Code.</p>
     <ul>
       <li>Click <b>+ New task</b>, type "Study for the database quiz", tag it <i>school</i>, save. It's at the top of the list.</li>
       <li>Tick another task complete.</li>
       <li>Refresh the page. Your task is gone and the ticked one is open again.</li>
     </ul>
-    <p>"We told Claude to keep the data in the browser only. Real apps need somewhere that remembers. Today we design that place; next lecture we build it in Supabase and plug this exact app into it."</p>
+    <p>"We told Claude to keep the data in the browser only. Real apps need somewhere that remembers: a database. This lecture we design it; next lecture Claude builds it in Supabase. Hooking Ticked up to it takes one more piece, an API, in a future lecture."</p>
   </aside>
 </section>
 
@@ -320,7 +320,7 @@ WHERE is_complete = false;
   <div class="src">demo-kit/task-manager-erd.png</div>
   <aside class="notes">
     <p>This is the backup screenshot, the same diagram you just drew. Walk it once more: "Every line is a foreign key. The crow's foot (the three-pronged end) is the many side."</p>
-    <p>"Next lecture we hand Claude this picture plus the user stories, and it builds the real database in Supabase, one table at a time, while we check its work. Then we connect Ticked to it, and refresh stops deleting everything."</p>
+    <p>"Next lecture we hand Claude this picture plus the user stories, and it builds the real database in Supabase, one table at a time, while we check its work. Connecting Ticked to it comes later, once we build the API."</p>
   </aside>
 </section>
 

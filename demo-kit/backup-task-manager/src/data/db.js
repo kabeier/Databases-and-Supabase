@@ -14,7 +14,7 @@
 //
 // Every function is `async` and returns a Promise, even though arrays
 // answer instantly. A real database answers over the network, so when
-// we swap this file for Supabase (supabase-js), the rest of the app
+// we swap this file for calls to a real API, the rest of the app
 // (context, pages, components) doesn't have to change at all.
 // =====================================================================
 

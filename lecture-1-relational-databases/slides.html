@@ -15,6 +15,7 @@
   <h1>Relational databases: plan your data before Claude builds it</h1>
   <p class="sub">Today you design the data on paper. Next lecture it moves into a real cloud database.</p>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> Today we design the data on paper. Next lecture it moves into a real cloud database.</p>
     <p><b>Before class:</b> open these tabs: Ticked (<code>…/Databases-and-Supabase/task-manager/</code>) for slide 3, <code>drawsql.app/draw</code> (no account needed), the Noun Hunt page, the Relationship Sorter page. In DrawSQL, pick <b>PostgreSQL</b> and <b>Start with a blank canvas</b> so it's ready at slide 12. Press <b>T</b> to start the clock.</p>
     <p>Keep <code>demo-kit/task-manager-erd.png</code> handy as the backup if DrawSQL misbehaves.</p>
   </aside>
@@ -30,6 +31,7 @@
     <li>Draw it all in DrawSQL, live</li>
   </ul>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> The agenda: what a relational database is, stories to tables, data types, and relationships.</p>
     <p>"Claude Code builds on the mental model you bring. If your model of the data is fuzzy, the database it builds will be fuzzy. Today we make it sharp."</p>
   </aside>
 </section>
@@ -39,6 +41,7 @@
   <p>The browser forgets. A database remembers, for every user, on every device.</p>
   <p class="small muted">kabeier.github.io/Databases-and-Supabase/task-manager/</p>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> The problem: add a task, refresh, and it's gone. A database fixes that. Show it live.</p>
     <p><b>** LIVE, about 1 minute. **</b> Open <b>Ticked</b>, the task manager we built in the SPA lectures (link above, or <code>npm run dev</code> in your copy): wireframes, user stories, a style guide, and Claude Code.</p>
     <ul>
       <li>Click <b>+ New task</b>, type "Study for the database quiz", tag it <i>school</i>, save. It's at the top of the list.</li>
@@ -54,6 +57,7 @@
   <img src="../diagrams/DB1-01-library.png" alt="A library as a database: books, members and loans tables, with loans pointing at books and members">
   <div class="src">diagrams/DB1-01-library.tldr</div>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> A library picture for what a relational database is.</p>
     <p>The library story from the reading. Three separate collections: books, members, loans. "Without the loans log it's a pile of disconnected facts. The loan connects a member to a book on a date. That connection is the <b>relational</b> in relational database."</p>
     <p>Point at a row (one book) and a column (title). Then: "Which books does Ana have? Find Ana's id, find her loans, look up those book ids. The database does that lookup for you when you ask in SQL."</p>
   </aside>
@@ -78,6 +82,7 @@
     </ul>
   </div>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> A table is a spreadsheet with rules.</p>
     <p>The primary key is like a Social Security number: it exists only to identify this one row. Two tasks can have the same title. They can never have the same id.</p>
     <p>"project_id is a foreign key. Park that word, we'll come back to it in 25 minutes."</p>
   </aside>
@@ -99,6 +104,7 @@ WHERE is_complete = false;
 <span class="c">-- You need to be able to read it.</span></pre>
   </div>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> The RDBMS is the engine, and SQL is how you talk to it.</p>
     <p>Four takeaways from the reading: data lives in tables, tables link through relationships, the RDBMS is the software that manages it, and you talk to it in SQL.</p>
     <p>Don't teach SQL syntax. Read the query out loud like English: "select the title from tasks where it isn't complete."</p>
   </aside>
@@ -109,6 +115,7 @@ WHERE is_complete = false;
   <img src="../diagrams/DB1-02-nouns-to-tables.png" alt="User stories with the nouns in capitals; each noun becomes a table and its details become columns. Write the stories down in user_stories.md: Claude reads it later to build the database.">
   <div class="src">diagrams/DB1-02-nouns-to-tables.tldr</div>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> A picture of how nouns in user stories become tables.</p>
     <p>"You already wrote user stories for your app. They're the start of your database too." Read the stories, point at the nouns in caps: USER, PROJECT, TASK, TAG. Each becomes a table.</p>
     <p><b>Show where they came from (30 sec).</b> Open Ticked's <code>app_outline/pages/</code> (one <code>user_story.md</code> per page, from the SPA lectures) next to <code>demo-kit/user_stories.md</code>. "I went through the page stories and pulled out one list: just the things the app has to <i>remember</i>. One line each. I added one the pages didn't have: an account. That's <code>user_stories.md</code>, and it's your homework too."</p>
     <p>Then the details: a task has a title, a due date, a done flag, a created time. Those become columns.</p>
@@ -139,6 +146,7 @@ WHERE is_complete = false;
   </div>
   <p class="bottomline">If it's a single value, it's a column. If it has its own details, it's a table.</p>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> The test for table or column: does it have details of its own?</p>
     <p>This is the tip box from the reading. "Status" is the classic trap: it feels like a thing, but it's just a value.</p>
     <p>Next is the activity, on a different app, so they practice the method instead of copying our example.</p>
   </aside>
@@ -155,6 +163,7 @@ WHERE is_complete = false;
   </ol>
   <p class="muted small" style="margin-top:24px">Page: activity-noun-hunt/</p>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> Activity: students mark the tables and columns in the Recipe Box stories, then post them.</p>
     <p><b>Timing:</b> 1 min to explain, 3 min to work, 2 min debrief. Post the link in chat.</p>
     <p><b>Debrief:</b> press <b>K</b> on the page to show the answer key. Expect: users, recipes, categories, ingredients, reviews. The hidden ones are <b>recipe_ingredients</b> (the amount belongs to the pairing of a recipe and an ingredient) and <b>favorites</b> (a user saves many recipes, a recipe is saved by many users).</p>
     <p>Traps worth calling out: <b>photo</b> is a column (a URL), not a table. <b>vegetarian</b> is a yes/no column. <b>category</b> could be a column or a table; a table wins if you want a fixed list to browse.</p>
@@ -176,6 +185,7 @@ WHERE is_complete = false;
   </div>
   <p class="bottomline" style="margin-top:32px">The right type keeps bad data out. Never store money as FLOAT.</p>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> Every column needs a data type. The ones we use most.</p>
     <p>Three reasons types matter: data is stored correctly, invalid data can't sneak in, and the database can work efficiently.</p>
     <p>FLOAT for money: 0.1 + 0.2 is 0.30000000000000004 in floating point. Fine for a game score, a real problem for a bank.</p>
     <p><b>JSONB</b> is in the reading too: a PostgreSQL "miscellaneous drawer" for JSON. Useful sometimes; don't use it to avoid designing tables.</p>
@@ -190,6 +200,7 @@ WHERE is_complete = false;
     <div class="how">I'll call one out. You type its data type.</div>
   </div>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> Quick fire: I call out a column, and everyone types its data type.</p>
     <p>Answers:</p>
     <ul>
       <li><b>price</b>: NUMERIC(10,2), never FLOAT</li>
@@ -230,6 +241,7 @@ WHERE is_complete = false;
     </div>
   </div>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> We draw the Task Manager tables live in DrawSQL.</p>
     <p><b>This is part 1 of the drawing: draw users, projects and tasks now</b>, with their columns and types, no lines. The table on the slide is the tasks table, for the class to read while you type. tags, task_tags and all the relationship lines come at slide 16, after the relationships section.</p>
     <p><b>** LIVE, about 6 minutes. **</b> Switch to the DrawSQL tab. Stories are in <code>demo-kit/user_stories.md</code>; read them out loud as you go.</p>
     <ul>
@@ -250,6 +262,7 @@ WHERE is_complete = false;
   <img src="../diagrams/DB1-03-relationships.png" alt="One-to-one: users and user_profiles. Many-to-one: tasks and projects. Many-to-many: students and courses through enrollments.">
   <div class="src">diagrams/DB1-03-relationships.tldr</div>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> A picture of the kinds of relationships between tables.</p>
     <p><b>Foreign key</b> first: a column holding the primary key of a row in another table. tasks.project_id = 3 means "I belong to project 3". It's a pointer.</p>
     <ul>
       <li><b>One-to-one</b>: a person and their passport. users / user_profiles. The FK has UNIQUE on it so two profiles can't point at the same user. Rare.</li>
@@ -269,6 +282,7 @@ WHERE is_complete = false;
   </table>
   <p class="bottomline">Don't reach for many-to-many unless both directions really are "many".</p>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> How to choose a relationship: say it both ways, then put the foreign key on the many side.</p>
     <p>The decision process from the reading: write the relationship in plain English, both directions. One and many = many-to-one. One and one = one-to-one. Many and many = junction table.</p>
     <p>"New designers make everything many-to-many. Before you add a junction table, ask: is there a real case with multiple records on BOTH sides?"</p>
   </aside>
@@ -285,6 +299,7 @@ WHERE is_complete = false;
   </ol>
   <p class="muted small" style="margin-top:24px">Page: activity-relationship-sorter/</p>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> Activity: two tables appear, and everyone says 1:1, M:1 or M:M, then where the foreign key goes.</p>
     <p>Open the page and share your screen. For each card: read the pair, count down from 3, everyone answers in chat, then click the answer to reveal the explanation.</p>
     <p>About 20 seconds a card. The first 8 cards are the core set; stop when the timer ends. Cards 4 and 8 come straight from the Noun Hunt (recipes).</p>
   </aside>
@@ -309,6 +324,7 @@ WHERE is_complete = false;
     </div>
   </div>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> We connect the tables in DrawSQL, then add tags and a junction table.</p>
     <p><b>** LIVE, about 3–4 minutes. **</b> Five lines in total: three now, two for task_tags.</p>
     <ul>
       <li>Hover a column: dots appear on its left and right edges. Drag from the FK column's dot onto the PK column it points at. A small popup lets you pick <b>1:1</b>, <b>1:N</b> or <b>N:1</b>; choose the one that reads right (many tasks to one project).</li>
@@ -325,6 +341,7 @@ WHERE is_complete = false;
   <img src="../diagrams/DB1-04-task-manager-erd.png" alt="DrawSQL diagram of the Task Manager: users, projects, tasks, task_tags and tags, connected by foreign keys">
   <div class="src">demo-kit/task-manager-erd.png</div>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> Our finished diagram.</p>
     <p>This is the backup screenshot, the same diagram you just drew. Walk it once more: "Every line is a foreign key. The crow's foot (the three-pronged end) is the many side."</p>
     <p>"Next lecture we hand Claude this picture plus the user stories, and it builds the real database in Supabase, one table at a time, while we check its work. Connecting Ticked to it, through an API, comes in a future lecture."</p>
   </aside>
@@ -334,6 +351,7 @@ WHERE is_complete = false;
   <h2>Draw it first. 15 minutes of diagramming saves hours of refactoring.</h2>
   <p>Your diagram is a thinking tool, a teamwork tool, and the instructions you give Claude.</p>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> The takeaway: 15 minutes of diagramming saves hours of refactoring.</p>
     <p>Recap in one breath: stories → nouns → tables, details → columns, pick a type for each, connect them with keys, draw it before any code.</p>
   </aside>
 </section>
@@ -359,6 +377,7 @@ WHERE is_complete = false;
     </div>
   </div>
   <aside class="notes">
+    <p class="plan"><b>The plan:</b> Walk through Homework Part I.</p>
     <p>Say the order out loud: the Netflix clone first, then your own app, then the certification.</p>
     <p><code>user_stories.md</code>: "Go through your <code>app_outline</code> page stories and journey, and write one line per thing your app has to remember: <i>As a user, I want to … so that …</i>. That list is where your nouns come from. Save it in your project folder; next lecture it moves into a new <code>supabase</code> folder." Template and example: the class site, Homework setup step 1.</p>
     <p>Tell them: <code>drawsql.app/draw</code> works with no account, but saves only in that browser. A free account keeps public diagrams with up to 15 tables. Export is a paid feature, so a screenshot is the plan.</p>
